@@ -128,7 +128,7 @@ def actualizar_dataset(file_path,jornada_actual) -> pd.DataFrame:
     df = pd.merge(df, df_tm, left_on='Anfitrion', right_on='Equipo', how='left')
     df = df.drop(['Equipo_x', 'Equipo_y'], axis=1)
     # Nombre del archivo Excel y de la hoja
-    file_path = 'LaLiga Dataset 2023-2024.xlsx'
+    file_path = r'C:\Users\Diego\OneDrive\Documents\ProyectoFinalCD\data\LaLiga Dataset 2023-2024.xlsx'
 
     df_existente = pd.read_excel(file_path)
 
@@ -416,7 +416,7 @@ def register_best_model():
 # Definimos el flow principal
 @flow(name="Pipeline de Entrenamiento y Registro de Modelos")
 def pipeline_entrenamiento(jornada_actual: int):
-    file_path ="LaLiga Dataset 2023-2024.xlsx"
+    file_path = r'C:\Users\Diego\OneDrive\Documents\ProyectoFinalCD\data\LaLiga Dataset 2023-2024.xlsx'
     jornada_actual = 15
     # Inicializamos MLflow y DagsHub
     dagshub.init(url="https://dagshub.com/JuanPab2009/ProyectoFinalCD", mlflow=True)
