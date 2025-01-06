@@ -4,7 +4,7 @@ import re
 import pickle
 import dagshub
 import pathlib
-from mlflow.metrics import precision_score, recall_score
+from sklearn.metrics import precision_score, recall_score  # Changed from mlflow.metrics
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -12,7 +12,6 @@ from prefect import task, flow
 from mlflow.tracking import MlflowClient
 from hyperopt import fmin, tpe, hp, Trials, STATUS_OK
 from hyperopt.pyll import scope
-from sklearn.metrics import accuracy_score, precision_score, recall_score
 import mlflow
 import mlflow.xgboost
 import xgboost as xgb
