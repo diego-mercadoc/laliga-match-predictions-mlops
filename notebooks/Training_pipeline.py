@@ -4,7 +4,7 @@ import re
 import pickle
 import dagshub
 import pathlib
-from sklearn.metrics import precision_score, recall_score  # Changed from mlflow.metrics
+from sklearn.metrics import precision_score, recall_score, accuracy_score  # Changed from mlflow.metrics
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -16,6 +16,19 @@ import mlflow
 import mlflow.xgboost
 import xgboost as xgb
 from xgboost import DMatrix
+
+# Add after your existing imports
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Set up MLflow tracking
+os.environ["MLFLOW_TRACKING_USERNAME"] = "JuanPab2009"
+os.environ["MLFLOW_TRACKING_PASSWORD"] = "87ebd63fd77e2ef94b83fc2c172f083bff205461"
+
+# Your existing code continues...
 
 # Definimos el primer task que es actualizar el dataset
 @task(name="Actualilzar dataset")
@@ -420,10 +433,15 @@ def pipeline_entrenamiento(jornada_actual: int):
     jornada_actual = 15
     # Inicializamos MLflow y DagsHub
     dagshub.init(url="https://dagshub.com/JuanPab2009/ProyectoFinalCD", mlflow=True)
-    MLFLOW_TRACKING_URI = mlflow.get_tracking_uri()
+    # Initialize MLflow with auth
+    MLFLOW_TRACKING_URI = "https://dagshub.com/JuanPab2009/ProyectoFinalCD.mlflow"
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+    os.environ['MLFLOW_TRACKING_USERNAME'] = "JuanPab2009"
+    os.environ['MLFLOW_TRACKING_PASSWORD'] = "87ebd63fd77e2ef94b83fc2c172f083bff205461"
+    
     mlflow.set_experiment(experiment_name="final-prefect-experiment")
-
+    
+    # Rest of the function...
     # Ejecutar las tareas de flujo
     print("Ejecutando tarea: Actualizar dataset")
     df = actualizar_dataset(file_path,jornada_actual)
