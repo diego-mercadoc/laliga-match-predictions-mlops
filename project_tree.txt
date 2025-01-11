@@ -1,0 +1,48 @@
+.
+├── Informe Escrito
+│   └── LaLigaPredictions.ipynb
+├── PresentacionFinal.pdf
+├── README.md
+├── data
+│   ├── LaLiga Dataset 2023-2024.xlsx
+│   └── laliga.csv
+├── notebooks
+│   ├── EDA_Preprocesado.ipynb
+│   ├── EDA_sin_Preprocesar.ipynb
+│   ├── Entrega2_Experiments.ipynb
+│   ├── Preprocesamiento.ipynb
+│   ├── Training_pipeline.py
+│   └── models
+│       └── scaler.pkl
+├── project_tree.txt
+└── src
+    ├── backend
+    │   ├── dockerfile
+    │   ├── dockerfile.prefect
+    │   ├── main.py
+    │   ├── requirements.txt
+    │   ├── API_DOCUMENTATION.md
+    │   └── utils
+    │       ├── __init__.py
+    │       ├── backup.py
+    │       └── visualization.py
+    ├── docker-compose.yaml
+    ├── prometheus
+    │   ├── prometheus.yml
+    │   └── alert.rules.yml
+    ├── grafana
+    │   └── provisioning
+    │       ├── dashboards
+    │       │   └── laliga_predictions.json
+    │       └── datasources
+    │           └── prometheus.yml
+    ├── mlflow
+    │   └── mlflow.yml
+    ├── minio
+    │   └── minio.env
+    └── frontend
+        ├── dockerfile
+        ├── main.py
+        └── requirements.txt
+
+14 directories, 27 files

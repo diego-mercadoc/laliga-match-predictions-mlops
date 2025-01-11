@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  training:
+    build:
+      context: .
+      dockerfile: dockerfile.training
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./data:/app/data
+      - ./features:/app/features
+      - ./training_pipeline.log:/app/training_pipeline.log
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MLFLOW_TRACKING_USERNAME=JuanPab2009
+      - MLFLOW_TRACKING_PASSWORD=87ebd63fd77e2ef94b83fc2c172f083bff205461
+      - MLFLOW_TRACKING_URI=https://dagshub.com/JuanPab2009/ProyectoFinalCD.mlflow
+      - DAGSHUB_USERNAME=JuanPab2009
+      - DAGSHUB_TOKEN=87ebd63fd77e2ef94b83fc2c172f083bff205461
+      - PREFECT_HOME=/app/.prefect
+      - PYTHONPATH=/app:/app/notebooks
+    command: ["${JORNADA:-20}", "${TARGET:-match_outcome}"]
+    tty: true
+    stdin_open: true
+    networks:
+      - laliga_network
+
+networks:
+  laliga_network:
+    name: laliga_network 

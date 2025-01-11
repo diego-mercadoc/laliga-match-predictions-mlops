@@ -1,0 +1,88 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libgomp1 \
+    git \
+    curl
+
+# Copy requirements and install Python packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install -r requirements.txt
+
+# Copy necessary files
+COPY notebooks/ /app/notebooks/
+COPY data/ /app/data/
+COPY features/ /app/features/
+
+# Create Prefect directory
+RUN mkdir -p /app/.prefect
+
+# Create run_pipeline.py
+COPY <<'EOF' /app/run_pipeline.py
+#!/usr/bin/env python3
+import mlflow
+import os
+import sys
+import logging
+import requests
+from requests.auth import HTTPBasicAuth
+import dagshub
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("training_pipeline.log", mode="w"),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger("training_pipeline")
+
+try:
+    logger.info(f"Python version: {sys.version}")
+    logger.info(f"Current working directory: {os.getcwd()}")
+    logger.info(f"Contents of current directory: {os.listdir('.')}")
+    
+    os.environ["MLFLOW_TRACKING_USERNAME"] = os.environ["DAGSHUB_USERNAME"]
+    os.environ["MLFLOW_TRACKING_PASSWORD"] = os.environ["DAGSHUB_TOKEN"]
+    
+    username = os.environ["MLFLOW_TRACKING_USERNAME"]
+    tracking_uri = os.environ["MLFLOW_TRACKING_URI"]
+    
+    logger.info("MLflow Configuration:")
+    logger.info(f"Tracking URI: {tracking_uri}")
+    logger.info(f"Username: {username}")
+    
+    mlflow.set_tracking_uri(tracking_uri)
+    
+    experiment = mlflow.get_experiment_by_name("final-prefect-experiment")
+    if experiment is None:
+        mlflow.create_experiment("final-prefect-experiment")
+    logger.info("MLflow experiment ready")
+    
+    logger.info(f"Starting pipeline with arguments: jornada={sys.argv[1]}, target={sys.argv[2]}")
+    from Training_pipeline_new import pipeline_entrenamiento
+    pipeline_entrenamiento(jornada_actual=int(sys.argv[1]), target=sys.argv[2])
+    
+except Exception as e:
+    logger.error(f"Pipeline failed: {str(e)}", exc_info=True)
+    sys.exit(1)
+EOF
+
+# Make run_pipeline.py executable
+RUN chmod +x /app/run_pipeline.py
+
+# Set working directory
+WORKDIR /app
+
+# Set environment variables
+ENV PYTHONPATH=/app:/app/notebooks
+
+# Command to run the pipeline
+ENTRYPOINT ["python", "run_pipeline.py"]
+CMD ["20", "match_outcome"] 

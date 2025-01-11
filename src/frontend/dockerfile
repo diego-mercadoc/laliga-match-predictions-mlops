@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY ./main.py /code/
 
 # Exponemos el puerto en el que correrá Streamlit
-EXPOSE 8502
+EXPOSE 8501
 
 # Comando para ejecutar la aplicación
-CMD ["streamlit", "run", "main.py", "--server.port", "8502", "--server.address", "0.0.0.0"]
+CMD ["streamlit", "run", "main.py", "--server.port", "8501", "--server.address", "0.0.0.0"]

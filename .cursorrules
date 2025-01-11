@@ -1,0 +1,231 @@
+# La Liga Match Outcome, Goals, Corners and Yellow Cards Prediction System
+
+*Rule: Project Name*
+
+Every time you choose to apply a rule(s), explicitly state the rule(s) in the output. You can abbreviate the rule description to a single word or phrase.
+
+## Project Context
+
+*   This project aims to develop a robust, data-driven system for predicting various outcomes in Spanish La Liga football matches.
+*   It goes beyond predicting match results (win/draw/loss) and extends to predicting:
+    *   Number of goals scored by each team.
+    *   Number of corners awarded to each team.
+    *   Number of yellow cards received by each team.
+*   The system employs a microservices architecture with a FastAPI backend for model serving, a Streamlit frontend for user interaction, and uses Docker and Docker Compose for containerization and orchestration.
+*   It follows MLOps best practices, utilizing Prefect for pipeline automation and MLflow for experiment tracking, model management, and model registry.
+
+*Rule: Project Context*
+
+## Data Sources and Flow
+
+*   The system uses three complementary data sources:
+    *   **Historical Data (`laliga.csv`)**:
+        *   Primary source for win/draw/loss predictions
+        *   Contains historical match statistics and outcomes
+        *   Used for feature engineering and model training
+        *   Maintained for historical analysis and model validation
+
+    *   **Current Season Reference (`LaLiga Dataset 2023-2024.xlsx`)**:
+        *   Reference data for current season matches
+        *   Used to validate live data fetches
+        *   Provides backup when API is unavailable
+        *   Contains additional features for goals/corners/cards predictions
+
+    *   **Live Data (fbref.com API)**:
+        *   Real-time match data and statistics
+        *   Updates current season information
+        *   Provides latest team performance metrics
+        *   Source for new prediction features
+
+*   **Data Flow**:
+    *   Historical data → Feature engineering → Model training
+    *   Current season data → Validation → Feature updates
+    *   Live data → Real-time predictions → Model serving
+
+*   **Data Quality**:
+    *   Automated validation between sources
+    *   Completeness checks for required features
+    *   Consistency validation across data sources
+    *   Timeliness checks for live data updates
+
+*Rule: Data Sources and Flow*
+
+## Code Style and Structure
+
+*   Write concise, technical Python code with accurate examples
+*   Use functional and declarative programming patterns; avoid classes
+*   Prefer iteration and modularization over code duplication
+*   Use descriptive variable names with auxiliary verbs (e.g., `is_loading`, `has_error`)
+*   Structure repository files as follows:
+
+```
+.
+├── Informe Escrito
+│   └── LaLigaPredictions.ipynb
+├── PresentacionFinal.pdf
+├── README.md
+├── data
+│   ├── LaLiga Dataset 2023-2024.xlsx
+│   └── laliga.csv
+├── notebooks
+│   ├── EDA_Preprocesado.ipynb
+│   ├── EDA_sin_Preprocesar.ipynb
+│   ├── Entrega2_Experiments.ipynb
+│   ├── Preprocesamiento.ipynb
+│   ├── Training_pipeline.py
+│   └── models
+│       └── scaler.pkl
+├── project_tree.txt
+└── src
+    ├── backend
+    │   ├── dockerfile
+    │   ├── main.py
+    │   └── requirements.txt
+    ├── docker-compose.yaml
+    └── frontend
+        ├── dockerfile
+        ├── main.py
+        └── requirements.txt
+
+8 directories, 19 files
+```
+
+*Rule: Structure repository files*
+
+## Tech Stack
+
+*   **Programming Language:** Python
+*   **Web Scraping:** pandas (for `read_html`), requests, lxml, `unidecode`
+*   **Data Manipulation:** pandas, NumPy
+*   **Machine Learning:** scikit-learn, XGBoost, (potentially) TensorFlow/PyTorch
+*   **Hyperparameter Tuning:** Hyperopt
+*   **Experiment Tracking:** MLflow
+*   **Pipeline Orchestration:** Prefect
+*   **API Framework:** FastAPI, uvicorn
+*   **Frontend:** Streamlit
+*   **Containerization:** Docker
+*   **Orchestration:** Docker Compose
+*   **Cloud Deployment:** (Future) AWS, Azure, or Google Cloud (with Kubernetes)
+*   **Database**: (Future) PostgreSQL, MySQL or similar.
+*   **Data Validation:** (Future) Great Expectations, pandera
+
+*Rule: Tech Stack*
+
+## Naming Conventions
+
+*   Use lowercase with underscores for directories (e.g., `data_processing`, `model_training`).
+*   Use lowercase with underscores for Python files (e.g., `train_model.py`, `data_utils.py`).
+*   Use camelCase for variables and functions (e.g., `matchData`, `calculateRollingAverage`).
+*   Use descriptive names for variables and functions that clearly indicate their purpose.
+*   Use ALL_CAPS for constants (e.g., `MODEL_REGISTRY_NAME`).
+
+*Rule: Naming Conventions*
+
+## Python Specific
+
+*   Use type hinting in function signatures and variable declarations.
+*   Favor list comprehensions and generator expressions where appropriate.
+*   Use f-strings for string formatting.
+*   Use context managers (`with` statement) for managing resources (e.g., files, database connections).
+*   Use the `logging` module for logging.
+*   Follow PEP 8 style guidelines.
+*   Write docstrings for all functions and modules.
+*   Avoid using `try/except` blocks unless there's good reason to translate or handle error in that abstraction. If used, always specify the exception type.
+
+*Rule: Python Specific*
+
+## Model Registry
+
+*   Use MLflow Model Registry to manage models.
+*   Name the model: "LaLigaPredictionsModel"
+*   Use aliases like "champion" and "challenger" to denote the best and second-best models. Also use "LaLigaBestModel".
+*   Log all relevant parameters, metrics, and artifacts to MLflow.
+*   Create different experiments for each target variable: "goals_prediction", "corners_prediction", "cards_prediction".
+*   Use tags to categorize experiments and runs (e.g., `prediction_type`, `target`, `model_type`, `features`).
+
+*Rule: Model Registry*
+
+## MLOps
+
+*   Use Prefect for pipeline orchestration, with a main flow and sub-flows for each prediction type.
+*   Use MLflow for experiment tracking, model management, and model registry.
+*   Use Docker for containerization and Docker Compose for local development and orchestration.
+*   Implement CI/CD pipelines for automated testing and deployment (future).
+
+*Rule: MLOps*
+
+## Error Handling
+
+*   Implement proper error handling in all functions using specific exception types.
+*   Log errors appropriately using the `logging` module, including timestamps and contextual information.
+*   Provide user-friendly error messages in the frontend when API calls fail or predictions cannot be generated.
+*   Handle network failures gracefully in the web scraping and API components. Use `try-except` blocks to catch `requests.exceptions.RequestException` and other relevant exceptions.
+
+*Rule: Error Handling*
+
+## Testing
+
+*   Write unit tests for data processing functions, feature engineering logic, and model training code using `pytest`.
+*   Implement integration tests for the API endpoints using a testing framework like `pytest` and a test client like `requests`.
+*   Test the entire pipeline end-to-end using sample data to ensure all components work together correctly.
+*   Test the Dockerized application locally to ensure reproducibility.
+
+*Rule: Testing*
+
+## Security
+
+*   Sanitize user inputs in the frontend to prevent cross-site scripting (XSS) and other security vulnerabilities.
+*   Handle API keys and other sensitive data securely using environment variables and avoid hardcoding them in the code.
+*   If using a database, secure it with strong passwords and restrict access to authorized users only.
+*   Follow best practices for securing FastAPI applications, such as using HTTPS and implementing authentication/authorization if needed.
+
+*Rule: Security*
+
+## Git Usage
+
+**Commit Message Prefixes:**
+
+*   "fix:" for bug fixes
+*   "feat:" for new features
+*   "perf:" for performance improvements
+*   "docs:" for documentation changes
+*   "style:" for formatting changes
+*   "refactor:" for code refactoring
+*   "test:" for adding missing tests
+*   "chore:" for maintenance tasks
+
+**Rules:**
+
+*   Use lowercase for commit messages
+*   Keep the summary line concise (under 50 characters)
+*   Include description for non-obvious changes
+*   Reference issue numbers when applicable (e.g., "Fix: Resolve issue #123")
+
+*Rule: Git Usage*
+
+## Documentation
+
+*   Maintain a clear `README.md` with:
+    *   Project description and overview.
+    *   Detailed setup instructions (including environment setup, dependencies, and database configuration if needed).
+    *   Usage examples for running the pipeline, making API calls, and using the frontend.
+    *   Explanation of the different prediction types and the models used.
+    *   Information about the data sources and feature engineering process.
+    *   Troubleshooting tips for common issues.
+*   Document API endpoints using FastAPI's built-in documentation features (OpenAPI/Swagger).
+*   Write docstrings for all functions and modules, explaining their purpose, parameters, and return values.
+*   Use comments sparingly, only for complex logic that is not self-explanatory.
+
+*Rule: Documentation*
+
+## Development Workflow
+
+*   Use Git for version control.
+*   Create feature branches for new features and bug fixes.
+*   Submit pull requests for code review before merging into the `main` branch.
+*   Use meaningful branch names that describe the feature or bug fix (e.g., `feat/add-corners-prediction`, `fix/handle-missing-data`).
+*   Test code locally and in the Docker environment before deploying.
+*   Follow semantic versioning (major.minor.patch) for releases.
+*   Maintain a changelog to track changes between releases.
+
+*Rule: Development Workflow*

@@ -1,0 +1,96 @@
+groups:
+  - name: DataPipeline
+    rules:
+      - alert: DataIngestionFailure
+        expr: rate(data_ingestion_failures_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Data ingestion failure detected
+          description: "{{ $value }} failures in data ingestion pipeline"
+
+      - alert: DataValidationFailure
+        expr: rate(data_validation_failures_total[5m]) > 0
+        for: 2m
+        labels:
+          severity: high
+        annotations:
+          summary: Data validation errors detected
+          description: "{{ $value }} validation failures in last 2 minutes"
+
+      - alert: FeatureEngineeringError
+        expr: rate(feature_engineering_errors_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: high
+        annotations:
+          summary: Feature engineering errors detected
+          description: "Problems in feature calculation pipeline"
+
+  - name: ModelPerformance
+    rules:
+      - alert: ModelAccuracyDrop
+        expr: prediction_accuracy < 0.7
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: Model accuracy below threshold
+          description: "Model accuracy at {{ $value }}"
+
+      - alert: PredictionLatencyHigh
+        expr: histogram_quantile(0.95, rate(prediction_duration_seconds_bucket[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: high
+        annotations:
+          summary: High prediction latency
+          description: "95th percentile prediction latency at {{ $value }} seconds"
+
+      - alert: ModelDriftDetected
+        expr: model_drift_score > 0.3
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: Model drift detected
+          description: "Drift score at {{ $value }}"
+
+  - name: SystemHealth
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Service is down
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute"
+
+      - alert: APIHighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: High API error rate
+          description: "Error rate above 1%"
+
+      - alert: HighMemoryUsage
+        expr: container_memory_usage_bytes / container_spec_memory_limit_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High memory usage
+          description: "Container using more than 90% of memory"
+
+      - alert: DiskSpaceLow
+        expr: disk_used_percent > 85
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low disk space
+          description: "Disk usage above 85%" 

@@ -11,6 +11,8 @@ COPY ./requirements.txt /code/requirements.txt
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libgomp1 \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Actualizamos pip e instalamos las dependencias de Python
@@ -21,7 +23,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY ./main.py /code/
 
 # Exponemos el puerto en el que correrá FastAPI
-EXPOSE 8001
+EXPOSE 8000
 
 # Comando para ejecutar la aplicación
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

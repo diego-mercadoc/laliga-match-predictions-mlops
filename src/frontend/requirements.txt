@@ -1,5 +1,5 @@
-streamlit
-requests
-pandas
-lxml
-unidecode
+streamlit==1.28.2
+requests==2.31.0
+pandas==1.5.3
+plotly==5.18.0
+numpy==1.24.3
