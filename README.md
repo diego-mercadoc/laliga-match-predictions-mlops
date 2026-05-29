@@ -184,6 +184,8 @@ curl http://localhost:8000/refresh/status
 
 A scheduled Codex automation named `Refresh LaLiga multi-season data` runs Tuesdays and Fridays at 06:30.
 
+The multi-season pipeline now validates every source file and writes a source manifest to `artifacts/multi_season/data_source_report.json`. Feature engineering includes leakage-safe Elo, season rank before kickoff, 3/5/10-match rolling form, head-to-head history, rest days, shot efficiency, and normalized market-implied probabilities from Football-Data odds. See `docs/data_sources.md` for the source rules and leakage policy.
+
 ### GitHub And DagsHub Publishing
 
 The MLOps-ready GitHub remote is:

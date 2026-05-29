@@ -14,20 +14,24 @@
     "2526"
   ],
   "best_experiment": {
-    "name": "last_4_logistic_regression_l2",
+    "name": "last_8_logistic_regression_l2_recency_2",
     "model_family": "logistic_regression",
-    "train_rows": 1292,
+    "train_rows": 2812,
     "test_rows": 228,
     "seasons": [
+      "1819",
+      "1920",
+      "2021",
+      "2122",
       "2223",
       "2324",
       "2425",
       "2526"
     ],
-    "accuracy": 0.5,
-    "f1_weighted": 0.45665687904485336,
-    "log_loss_proxy": 0.9725910481535377,
-    "recency_half_life": null,
+    "accuracy": 0.5219298245614035,
+    "f1_weighted": 0.46136429000967394,
+    "log_loss_proxy": 0.9554014743628237,
+    "recency_half_life": 2.0,
     "params": {
       "regParam": 0.08,
       "elasticNetParam": 0.0
@@ -42,9 +46,9 @@
       "seasons": [
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.458419282794505,
-      "log_loss_proxy": 1.0014433715027973,
+      "accuracy": 0.5350877192982456,
+      "f1_weighted": 0.46905104379633705,
+      "log_loss_proxy": 1.0565970295761173,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -59,9 +63,9 @@
       "seasons": [
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.47642453672489327,
-      "log_loss_proxy": 0.9889468555564536,
+      "accuracy": 0.4868421052631579,
+      "f1_weighted": 0.44019704834842527,
+      "log_loss_proxy": 0.9939120296087011,
       "recency_half_life": null,
       "params": {
         "numTrees": 80,
@@ -78,9 +82,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5043859649122807,
-      "f1_weighted": 0.4524876889413747,
-      "log_loss_proxy": 0.9876142905098746,
+      "accuracy": 0.37719298245614036,
+      "f1_weighted": 0.32512603347449087,
+      "log_loss_proxy": 1.3531338445226717,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -96,9 +100,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5043859649122807,
-      "f1_weighted": 0.4519600528037651,
-      "log_loss_proxy": 0.9823077697848188,
+      "accuracy": 0.4956140350877193,
+      "f1_weighted": 0.43118908382066273,
+      "log_loss_proxy": 0.9726472473458824,
       "recency_half_life": null,
       "params": {
         "numTrees": 80,
@@ -117,9 +121,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.45665687904485336,
-      "log_loss_proxy": 0.9725910481535377,
+      "accuracy": 0.3815789473684211,
+      "f1_weighted": 0.3324285190508169,
+      "log_loss_proxy": 1.302773262586888,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -137,9 +141,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.4694976076555024,
-      "log_loss_proxy": 0.9748133428258076,
+      "accuracy": 0.41228070175438597,
+      "f1_weighted": 0.36576293247625835,
+      "log_loss_proxy": 1.26403435301541,
       "recency_half_life": 2.0,
       "params": {
         "regParam": 0.08,
@@ -157,9 +161,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.459699846264391,
-      "log_loss_proxy": 0.9735951589606916,
+      "accuracy": 0.3991228070175439,
+      "f1_weighted": 0.3500970563664062,
+      "log_loss_proxy": 1.2851676225423943,
       "recency_half_life": 4.0,
       "params": {
         "regParam": 0.08,
@@ -177,9 +181,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.4956140350877193,
-      "f1_weighted": 0.44525706483915894,
-      "log_loss_proxy": 0.9813621619359756,
+      "accuracy": 0.5043859649122807,
+      "f1_weighted": 0.42957248717461527,
+      "log_loss_proxy": 0.964613185244791,
       "recency_half_life": null,
       "params": {
         "numTrees": 80,
@@ -198,9 +202,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.4824561403508772,
-      "f1_weighted": 0.41879400448114024,
-      "log_loss_proxy": 0.9801669403903692,
+      "accuracy": 0.5,
+      "f1_weighted": 0.42962448887721794,
+      "log_loss_proxy": 0.9680999181829038,
       "recency_half_life": 2.0,
       "params": {
         "numTrees": 80,
@@ -219,9 +223,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.49122807017543857,
-      "f1_weighted": 0.424413050254061,
-      "log_loss_proxy": 0.9757194956657875,
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.44611528822055135,
+      "log_loss_proxy": 0.9675695374451911,
       "recency_half_life": 4.0,
       "params": {
         "numTrees": 80,
@@ -244,9 +248,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.4956140350877193,
-      "f1_weighted": 0.4220114570482833,
-      "log_loss_proxy": 0.9815501571767891,
+      "accuracy": 0.5263157894736842,
+      "f1_weighted": 0.44453060551064183,
+      "log_loss_proxy": 0.9643495696305698,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -268,9 +272,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.44031290347079827,
-      "log_loss_proxy": 0.9776710620293015,
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.46136429000967394,
+      "log_loss_proxy": 0.9554014743628237,
       "recency_half_life": 2.0,
       "params": {
         "regParam": 0.08,
@@ -292,9 +296,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.4321288398862769,
-      "log_loss_proxy": 0.9792212033659535,
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.4350343269354159,
+      "log_loss_proxy": 0.9594057712586297,
       "recency_half_life": 4.0,
       "params": {
         "regParam": 0.08,
@@ -316,9 +320,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.43559914744125267,
-      "log_loss_proxy": 0.9824621215885124,
+      "accuracy": 0.5043859649122807,
+      "f1_weighted": 0.4367575289553769,
+      "log_loss_proxy": 0.9687173219433491,
       "recency_half_life": null,
       "params": {
         "numTrees": 80,
@@ -341,9 +345,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5043859649122807,
-      "f1_weighted": 0.45230121779397847,
-      "log_loss_proxy": 0.974099499739248,
+      "accuracy": 0.49122807017543857,
+      "f1_weighted": 0.4233969539232697,
+      "log_loss_proxy": 0.9774985989499366,
       "recency_half_life": 2.0,
       "params": {
         "numTrees": 80,
@@ -366,9 +370,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.44168930884264684,
-      "log_loss_proxy": 0.9737773202916324,
+      "accuracy": 0.5043859649122807,
+      "f1_weighted": 0.4357823839997015,
+      "log_loss_proxy": 0.9703685302037603,
       "recency_half_life": 4.0,
       "params": {
         "numTrees": 80,
@@ -377,7 +381,9 @@
       }
     }
   ],
-  "predictions_csv": "C:\\Users\\Diego\\Documents\\Documents\\ProyectoFinalCD\\artifacts\\multi_season\\current_season_predictions.csv",
-  "features_csv": "C:\\Users\\Diego\\Documents\\Documents\\ProyectoFinalCD\\artifacts\\multi_season\\laliga_multi_season_features.csv",
-  "experiments_csv": "C:\\Users\\Diego\\Documents\\Documents\\ProyectoFinalCD\\artifacts\\multi_season\\experiment_results.csv"
+  "predictions_csv": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\artifacts\\multi_season\\current_season_predictions.csv",
+  "features_csv": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\artifacts\\multi_season\\laliga_multi_season_features.csv",
+  "experiments_csv": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\artifacts\\multi_season\\experiment_results.csv",
+  "data_source_report_json": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\artifacts\\multi_season\\data_source_report.json",
+  "feature_count": 89
 }

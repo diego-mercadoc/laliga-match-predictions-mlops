@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence
@@ -22,6 +23,36 @@ CURRENT_SEASON = "2526"
 DEFAULT_SEASONS = ["1819", "1920", "2021", "2122", "2223", "2324", "2425", "2526"]
 FOOTBALL_DATA_TEMPLATE = "https://www.football-data.co.uk/mmz4281/{season}/SP1.csv"
 
+MARKET_ODDS_GROUPS = [
+    ("AvgCH", "AvgCD", "AvgCA"),
+    ("MaxCH", "MaxCD", "MaxCA"),
+    ("B365CH", "B365CD", "B365CA"),
+    ("PSCH", "PSCD", "PSCA"),
+    ("AvgH", "AvgD", "AvgA"),
+    ("MaxH", "MaxD", "MaxA"),
+    ("B365H", "B365D", "B365A"),
+    ("PSH", "PSD", "PSA"),
+]
+
+TOTAL_GOALS_ODDS_GROUPS = [
+    ("AvgC>2.5", "AvgC<2.5"),
+    ("MaxC>2.5", "MaxC<2.5"),
+    ("B365C>2.5", "B365C<2.5"),
+    ("PC>2.5", "PC<2.5"),
+    ("Avg>2.5", "Avg<2.5"),
+    ("Max>2.5", "Max<2.5"),
+    ("B365>2.5", "B365<2.5"),
+    ("P>2.5", "P<2.5"),
+]
+
+MARKET_COLUMNS = sorted(
+    {
+        column
+        for group in [*MARKET_ODDS_GROUPS, *TOTAL_GOALS_ODDS_GROUPS]
+        for column in group
+    }
+)
+
 RAW_COLUMNS = [
     "Season",
     "Date",
@@ -42,6 +73,7 @@ RAW_COLUMNS = [
     "AY",
     "HR",
     "AR",
+    *MARKET_COLUMNS,
 ]
 
 FEATURE_COLUMNS = [
@@ -59,6 +91,10 @@ FEATURE_COLUMNS = [
     "away_corners_per_match",
     "home_cards_per_match",
     "away_cards_per_match",
+    "home_shot_accuracy",
+    "away_shot_accuracy",
+    "home_conversion_rate",
+    "away_conversion_rate",
     "home_win_rate",
     "away_win_rate",
     "home_draw_rate",
@@ -69,8 +105,46 @@ FEATURE_COLUMNS = [
     "away_recent_points_per_match",
     "home_recent_goal_diff",
     "away_recent_goal_diff",
+    "home_recent_3_points_per_match",
+    "away_recent_3_points_per_match",
+    "home_recent_3_goal_diff",
+    "away_recent_3_goal_diff",
+    "home_recent_3_shots_on_target",
+    "away_recent_3_shots_on_target",
+    "home_recent_3_corners",
+    "away_recent_3_corners",
+    "home_recent_5_points_per_match",
+    "away_recent_5_points_per_match",
+    "home_recent_5_goal_diff",
+    "away_recent_5_goal_diff",
+    "home_recent_5_shots_on_target",
+    "away_recent_5_shots_on_target",
+    "home_recent_5_corners",
+    "away_recent_5_corners",
+    "home_recent_10_points_per_match",
+    "away_recent_10_points_per_match",
+    "home_recent_10_goal_diff",
+    "away_recent_10_goal_diff",
+    "home_recent_10_shots_on_target",
+    "away_recent_10_shots_on_target",
+    "home_recent_10_corners",
+    "away_recent_10_corners",
     "home_home_points_per_match",
     "away_away_points_per_match",
+    "home_season_points_per_match",
+    "away_season_points_per_match",
+    "home_season_goal_diff_per_match",
+    "away_season_goal_diff_per_match",
+    "home_season_shot_accuracy",
+    "away_season_shot_accuracy",
+    "home_season_conversion_rate",
+    "away_season_conversion_rate",
+    "home_season_rank_prior",
+    "away_season_rank_prior",
+    "season_rank_diff",
+    "h2h_home_points_per_match",
+    "h2h_home_goal_diff_per_match",
+    "h2h_matches",
     "home_matches_played",
     "away_matches_played",
     "home_elo",
@@ -79,6 +153,16 @@ FEATURE_COLUMNS = [
     "home_rest_days",
     "away_rest_days",
     "matchday",
+    "market_home_prob",
+    "market_draw_prob",
+    "market_away_prob",
+    "market_home_advantage",
+    "market_entropy",
+    "market_overround",
+    "market_sources_count",
+    "market_over25_prob",
+    "market_under25_prob",
+    "market_goals_sources_count",
     "is_home_promoted_proxy",
     "is_away_promoted_proxy",
     "season_age",
@@ -121,6 +205,41 @@ class MultiSeasonRunResult:
     output_dir: str
     data_rows: int
     seasons: List[str]
+
+
+def validate_source_files(paths: Iterable[Path]) -> List[Dict[str, object]]:
+    reports: List[Dict[str, object]] = []
+    required_columns = {"Date", "HomeTeam", "AwayTeam", "FTR", "FTHG", "FTAG"}
+    for path in paths:
+        pdf = pd.read_csv(path, encoding="utf-8-sig")
+        date_series = pd.to_datetime(pdf.get("Date"), dayfirst=True, errors="coerce")
+        market_columns = [column for column in MARKET_COLUMNS if column in pdf.columns]
+        rows = len(pdf)
+        reports.append(
+            {
+                "path": str(path),
+                "season": path.stem.split("_")[-1],
+                "rows": rows,
+                "date_min": None if date_series.dropna().empty else str(date_series.min().date()),
+                "date_max": None if date_series.dropna().empty else str(date_series.max().date()),
+                "missing_required_columns": sorted(required_columns - set(pdf.columns)),
+                "duplicate_fixture_rows": int(pdf.duplicated(subset=["Date", "HomeTeam", "AwayTeam"]).sum())
+                if required_columns.issubset(pdf.columns)
+                else None,
+                "result_rows": int(pdf["FTR"].isin(["H", "D", "A"]).sum()) if "FTR" in pdf.columns else 0,
+                "market_columns_present": market_columns,
+                "market_column_count": len(market_columns),
+                "avg_closing_odds_coverage": float(
+                    pdf[[column for column in ["AvgCH", "AvgCD", "AvgCA"] if column in pdf.columns]]
+                    .dropna()
+                    .shape[0]
+                    / rows
+                )
+                if rows and {"AvgCH", "AvgCD", "AvgCA"}.issubset(pdf.columns)
+                else 0.0,
+            }
+        )
+    return reports
 
 
 def download_football_data(
@@ -184,6 +303,8 @@ def _empty_stats() -> Dict[str, float]:
 
 def _averages(stats: Dict[str, float], prefix: str, default_matches: float = 1.0) -> Dict[str, float]:
     matches = max(stats["matches"], default_matches)
+    shots = max(stats["shots"], 1.0)
+    shots_target = max(stats["shots_target"], 1.0)
     return {
         f"{prefix}_points_per_match": stats["points"] / matches,
         f"{prefix}_goals_for_per_match": stats["gf"] / matches,
@@ -192,6 +313,9 @@ def _averages(stats: Dict[str, float], prefix: str, default_matches: float = 1.0
         f"{prefix}_shots_on_target_per_match": stats["shots_target"] / matches,
         f"{prefix}_corners_per_match": stats["corners"] / matches,
         f"{prefix}_cards_per_match": stats["cards"] / matches,
+        f"{prefix}_shot_accuracy": stats["shots_target"] / shots,
+        f"{prefix}_conversion_rate": stats["gf"] / shots,
+        f"{prefix}_goals_per_shot_on_target": stats["gf"] / shots_target,
         f"{prefix}_win_rate": stats["wins"] / matches,
         f"{prefix}_draw_rate": stats["draws"] / matches,
         f"{prefix}_loss_rate": stats["losses"] / matches,
@@ -217,12 +341,127 @@ def _update_stats(stats: Dict[str, float], gf: float, ga: float, shots: float, s
         stats["losses"] += 1
 
 
+def _recent_window_features(matches: List[Dict[str, float]], prefix: str, window: int) -> Dict[str, float]:
+    recent_matches = matches[-window:]
+    if not recent_matches:
+        return {
+            f"{prefix}_recent_{window}_points_per_match": 1.0,
+            f"{prefix}_recent_{window}_goal_diff": 0.0,
+            f"{prefix}_recent_{window}_shots_on_target": 0.0,
+            f"{prefix}_recent_{window}_corners": 0.0,
+        }
+    count = len(recent_matches)
+    return {
+        f"{prefix}_recent_{window}_points_per_match": sum(item["points"] for item in recent_matches) / count,
+        f"{prefix}_recent_{window}_goal_diff": sum(item["gf"] - item["ga"] for item in recent_matches) / count,
+        f"{prefix}_recent_{window}_shots_on_target": sum(item["shots_target"] for item in recent_matches) / count,
+        f"{prefix}_recent_{window}_corners": sum(item["corners"] for item in recent_matches) / count,
+    }
+
+
+def _market_features(match: pd.Series) -> Dict[str, float]:
+    implied_rows = []
+    for home_col, draw_col, away_col in MARKET_ODDS_GROUPS:
+        odds = [match.get(home_col), match.get(draw_col), match.get(away_col)]
+        if any(pd.isna(value) or float(value) <= 1.0 for value in odds):
+            continue
+        raw = [1.0 / float(value) for value in odds]
+        overround = sum(raw)
+        if overround <= 0:
+            continue
+        implied_rows.append(
+            {
+                "home": raw[0] / overround,
+                "draw": raw[1] / overround,
+                "away": raw[2] / overround,
+                "overround": overround,
+            }
+        )
+
+    if implied_rows:
+        home_prob = sum(item["home"] for item in implied_rows) / len(implied_rows)
+        draw_prob = sum(item["draw"] for item in implied_rows) / len(implied_rows)
+        away_prob = sum(item["away"] for item in implied_rows) / len(implied_rows)
+        overround = sum(item["overround"] for item in implied_rows) / len(implied_rows)
+    else:
+        home_prob, draw_prob, away_prob, overround = 0.45, 0.27, 0.28, 1.0
+
+    entropy = -sum(prob * math.log(max(prob, 1e-15)) for prob in [home_prob, draw_prob, away_prob])
+
+    goal_rows = []
+    for over_col, under_col in TOTAL_GOALS_ODDS_GROUPS:
+        odds = [match.get(over_col), match.get(under_col)]
+        if any(pd.isna(value) or float(value) <= 1.0 for value in odds):
+            continue
+        raw = [1.0 / float(value) for value in odds]
+        overround_goals = sum(raw)
+        if overround_goals <= 0:
+            continue
+        goal_rows.append((raw[0] / overround_goals, raw[1] / overround_goals))
+
+    if goal_rows:
+        over25_prob = sum(item[0] for item in goal_rows) / len(goal_rows)
+        under25_prob = sum(item[1] for item in goal_rows) / len(goal_rows)
+    else:
+        over25_prob, under25_prob = 0.50, 0.50
+
+    return {
+        "market_home_prob": home_prob,
+        "market_draw_prob": draw_prob,
+        "market_away_prob": away_prob,
+        "market_home_advantage": home_prob - away_prob,
+        "market_entropy": entropy,
+        "market_overround": overround,
+        "market_sources_count": float(len(implied_rows)),
+        "market_over25_prob": over25_prob,
+        "market_under25_prob": under25_prob,
+        "market_goals_sources_count": float(len(goal_rows)),
+    }
+
+
+def _prior_rank(season_stats: Dict[tuple[str, str], Dict[str, float]], season: str, team: str) -> int:
+    teams = sorted({key_team for key_season, key_team in season_stats if key_season == season})
+    if team not in teams:
+        teams.append(team)
+
+    ranked = sorted(
+        teams,
+        key=lambda item: (
+            -season_stats.get((season, item), _empty_stats())["points"],
+            -(season_stats.get((season, item), _empty_stats())["gf"] - season_stats.get((season, item), _empty_stats())["ga"]),
+            -season_stats.get((season, item), _empty_stats())["gf"],
+            item,
+        ),
+    )
+    return ranked.index(team) + 1
+
+
+def _h2h_features(matches: List[Dict[str, float]], home: str) -> Dict[str, float]:
+    recent_matches = matches[-6:]
+    if not recent_matches:
+        return {
+            "h2h_home_points_per_match": 1.0,
+            "h2h_home_goal_diff_per_match": 0.0,
+            "h2h_matches": 0.0,
+        }
+    count = len(recent_matches)
+    points = sum(item["points_by_team"].get(home, 0.0) for item in recent_matches)
+    goal_diff = sum(item["goal_diff_by_team"].get(home, 0.0) for item in recent_matches)
+    return {
+        "h2h_home_points_per_match": points / count,
+        "h2h_home_goal_diff_per_match": goal_diff / count,
+        "h2h_matches": float(count),
+    }
+
+
 def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
     rows = []
     first_season = str(matches["Season"].min())
     all_time: Dict[str, Dict[str, float]] = {}
     home_only: Dict[str, Dict[str, float]] = {}
     away_only: Dict[str, Dict[str, float]] = {}
+    season_only: Dict[tuple[str, str], Dict[str, float]] = {}
+    h2h: Dict[tuple[str, str], List[Dict[str, object]]] = {}
     recent: Dict[str, List[Dict[str, float]]] = {}
     season_team_matches: Dict[tuple[str, str], int] = {}
     elo_ratings: Dict[str, float] = {}
@@ -239,15 +478,21 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
             all_time.setdefault(team, _empty_stats())
             home_only.setdefault(team, _empty_stats())
             away_only.setdefault(team, _empty_stats())
+            season_only.setdefault((season, team), _empty_stats())
             recent.setdefault(team, [])
             elo_ratings.setdefault(team, 1500.0)
 
         home_stats = _averages(all_time[home], "home")
         away_stats = _averages(all_time[away], "away")
+        home_season_stats = _averages(season_only[(season, home)], "home_season")
+        away_season_stats = _averages(season_only[(season, away)], "away_season")
         home_elo = elo_ratings[home]
         away_elo = elo_ratings[away]
         home_rest = (match_date - last_played[home]).days if home in last_played else 7
         away_rest = (match_date - last_played[away]).days if away in last_played else 7
+        home_rank = _prior_rank(season_only, season, home)
+        away_rank = _prior_rank(season_only, season, away)
+        h2h_key = tuple(sorted([home, away]))
         row = {
             "Season": season,
             "Date": match_date,
@@ -266,6 +511,21 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
             "elo_diff": home_elo + home_advantage - away_elo,
             "home_rest_days": min(home_rest, 21),
             "away_rest_days": min(away_rest, 21),
+            "home_season_points_per_match": home_season_stats["home_season_points_per_match"],
+            "away_season_points_per_match": away_season_stats["away_season_points_per_match"],
+            "home_season_goal_diff_per_match": home_season_stats["home_season_goals_for_per_match"]
+            - home_season_stats["home_season_goals_against_per_match"],
+            "away_season_goal_diff_per_match": away_season_stats["away_season_goals_for_per_match"]
+            - away_season_stats["away_season_goals_against_per_match"],
+            "home_season_shot_accuracy": home_season_stats["home_season_shot_accuracy"],
+            "away_season_shot_accuracy": away_season_stats["away_season_shot_accuracy"],
+            "home_season_conversion_rate": home_season_stats["home_season_conversion_rate"],
+            "away_season_conversion_rate": away_season_stats["away_season_conversion_rate"],
+            "home_season_rank_prior": home_rank,
+            "away_season_rank_prior": away_rank,
+            "season_rank_diff": away_rank - home_rank,
+            **_h2h_features(h2h.get(h2h_key, []), home),
+            **_market_features(match),
             **home_stats,
             **away_stats,
         }
@@ -283,6 +543,8 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
             else:
                 row[f"{prefix}_recent_points_per_match"] = 1.0
                 row[f"{prefix}_recent_goal_diff"] = 0.0
+            for window in [3, 5, 10]:
+                row.update(_recent_window_features(recent[team], prefix, window))
 
         row["is_home_promoted_proxy"] = 1 if all_time[home]["matches"] < 15 and season != first_season else 0
         row["is_away_promoted_proxy"] = 1 if all_time[away]["matches"] < 15 and season != first_season else 0
@@ -295,9 +557,35 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
         _update_stats(all_time[away], away_goals, home_goals, match.get("AS"), match.get("AST"), match.get("AC"), match.get("AY"))
         _update_stats(home_only[home], home_goals, away_goals, match.get("HS"), match.get("HST"), match.get("HC"), match.get("HY"))
         _update_stats(away_only[away], away_goals, home_goals, match.get("AS"), match.get("AST"), match.get("AC"), match.get("AY"))
+        _update_stats(season_only[(season, home)], home_goals, away_goals, match.get("HS"), match.get("HST"), match.get("HC"), match.get("HY"))
+        _update_stats(season_only[(season, away)], away_goals, home_goals, match.get("AS"), match.get("AST"), match.get("AC"), match.get("AY"))
 
-        recent[home].append({"points": 3 if home_goals > away_goals else 1 if home_goals == away_goals else 0, "gf": home_goals, "ga": away_goals})
-        recent[away].append({"points": 3 if away_goals > home_goals else 1 if away_goals == home_goals else 0, "gf": away_goals, "ga": home_goals})
+        home_points = 3 if home_goals > away_goals else 1 if home_goals == away_goals else 0
+        away_points = 3 if away_goals > home_goals else 1 if away_goals == home_goals else 0
+        recent[home].append(
+            {
+                "points": home_points,
+                "gf": home_goals,
+                "ga": away_goals,
+                "shots_target": 0.0 if pd.isna(match.get("HST")) else float(match.get("HST")),
+                "corners": 0.0 if pd.isna(match.get("HC")) else float(match.get("HC")),
+            }
+        )
+        recent[away].append(
+            {
+                "points": away_points,
+                "gf": away_goals,
+                "ga": home_goals,
+                "shots_target": 0.0 if pd.isna(match.get("AST")) else float(match.get("AST")),
+                "corners": 0.0 if pd.isna(match.get("AC")) else float(match.get("AC")),
+            }
+        )
+        h2h.setdefault(h2h_key, []).append(
+            {
+                "points_by_team": {home: float(home_points), away: float(away_points)},
+                "goal_diff_by_team": {home: home_goals - away_goals, away: away_goals - home_goals},
+            }
+        )
         season_team_matches[(season, home)] = season_team_matches.get((season, home), 0) + 1
         season_team_matches[(season, away)] = season_team_matches.get((season, away), 0) + 1
         expected_home = 1.0 / (1.0 + 10 ** ((away_elo - (home_elo + home_advantage)) / 400.0))
@@ -475,6 +763,9 @@ def run_multi_season_experiments(
 
     try:
         raw_paths = download_football_data(repo_root / "data" / "raw" / "football_data", seasons, force=force_download)
+        source_report = validate_source_files(raw_paths)
+        source_report_path = output_dir / "data_source_report.json"
+        source_report_path.write_text(json.dumps(source_report, indent=2, ensure_ascii=False), encoding="utf-8")
         matches = load_match_data(raw_paths)
         features = build_temporal_features(matches)
         features_path = output_dir / "laliga_multi_season_features.csv"
@@ -522,6 +813,8 @@ def run_multi_season_experiments(
                     "predictions_csv": str(predictions_path),
                     "features_csv": str(features_path),
                     "experiments_csv": str(experiments_path),
+                    "data_source_report_json": str(source_report_path),
+                    "feature_count": len(FEATURE_COLUMNS),
                 },
                 indent=2,
                 ensure_ascii=False,
