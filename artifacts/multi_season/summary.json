@@ -139,7 +139,7 @@
       ],
       "accuracy": 0.5087719298245614,
       "f1_weighted": 0.46510396745251614,
-      "log_loss_proxy": 0.9495079313155836,
+      "log_loss_proxy": 0.9495079313167757,
       "recency_half_life": 2.0,
       "params": {
         "regParam": 0.08,
@@ -246,7 +246,7 @@
       ],
       "accuracy": 0.5087719298245614,
       "f1_weighted": 0.4399211055808535,
-      "log_loss_proxy": 0.9646861726102153,
+      "log_loss_proxy": 0.9646861726113116,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -294,7 +294,7 @@
       ],
       "accuracy": 0.5175438596491229,
       "f1_weighted": 0.4504555881228495,
-      "log_loss_proxy": 0.9595274188482258,
+      "log_loss_proxy": 0.9595274188484515,
       "recency_half_life": 4.0,
       "params": {
         "regParam": 0.08,

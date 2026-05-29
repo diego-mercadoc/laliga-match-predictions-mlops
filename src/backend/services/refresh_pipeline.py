@@ -112,7 +112,9 @@ def run_refresh_pipeline(
         if target_result:
             payload["multi_target_summary"] = {
                 "target_count": target_result["target_count"],
+                "imbalanced_classification_targets": target_result.get("imbalanced_classification_targets"),
                 "best_accuracy_target": target_result["best_accuracy_target"],
+                "best_raw_accuracy_target": target_result.get("best_raw_accuracy_target"),
                 "best_balanced_target": target_result["best_balanced_target"],
                 "best_regression_target": target_result["best_regression_target"],
             }

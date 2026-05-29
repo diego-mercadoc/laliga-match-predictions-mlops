@@ -1,8 +1,8 @@
 {
   "state": "succeeded",
-  "started_at": "2026-05-29T20:52:59.642139+00:00",
-  "completed_at": "2026-05-29T21:00:14.465265+00:00",
-  "force_download": true,
+  "started_at": "2026-05-29T21:02:46.313852+00:00",
+  "completed_at": "2026-05-29T21:10:22.380083+00:00",
+  "force_download": false,
   "skip_experiments": false,
   "raw_files": [
     {
@@ -75,6 +75,7 @@
   },
   "multi_target_summary": {
     "target_count": 24,
+    "imbalanced_classification_targets": 4,
     "best_accuracy_target": {
       "target": "home_win",
       "task_type": "classification",
@@ -98,6 +99,30 @@
       "decision_threshold": 0.62,
       "imbalance_flag": false,
       "notes": ""
+    },
+    "best_raw_accuracy_target": {
+      "target": "under_6_5_goals",
+      "task_type": "classification",
+      "model_name": "hist_gradient_boosting",
+      "train_rows": 2812,
+      "test_rows": 228,
+      "target_rate": 0.9868421052631579,
+      "majority_class_rate": 0.9868421052631579,
+      "accuracy": 0.9868421052631579,
+      "balanced_accuracy": 0.5,
+      "f1_weighted": 0.9803067270826071,
+      "roc_auc": 0.6177777777777778,
+      "log_loss": 0.10955439133442875,
+      "brier_score": 0.013552379209467953,
+      "mae": null,
+      "rmse": null,
+      "r2": null,
+      "baseline_metric": 0.9868421052631579,
+      "baseline_accuracy_delta": 0.0,
+      "selection_metric": 0.6073793423957244,
+      "decision_threshold": 0.05,
+      "imbalance_flag": true,
+      "notes": "Imbalanced target; model selected by balanced metrics and tuned threshold, not raw accuracy. Does not beat majority-class accuracy baseline."
     },
     "best_balanced_target": {
       "target": "home_win",
@@ -137,12 +162,12 @@
       "roc_auc": null,
       "log_loss": null,
       "brier_score": null,
-      "mae": 1.750449530193393,
+      "mae": 1.7504495301933927,
       "rmse": 2.2164017508900327,
       "r2": 0.034919161466866466,
       "baseline_metric": 1.9035087719298245,
       "baseline_accuracy_delta": null,
-      "selection_metric": 0.15305924173643137,
+      "selection_metric": 0.15305924173643182,
       "decision_threshold": null,
       "imbalance_flag": false,
       "notes": "Selection metric is baseline MAE improvement."
