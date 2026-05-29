@@ -184,6 +184,24 @@ curl http://localhost:8000/refresh/status
 
 A scheduled Codex automation named `Refresh LaLiga multi-season data` runs Tuesdays and Fridays at 06:30.
 
+### GitHub And DagsHub Publishing
+
+The MLOps-ready GitHub remote is:
+
+```bash
+git remote add mlops https://github.com/diego-mercadoc/laliga-match-predictions-mlops.git
+git push -u mlops HEAD:main
+```
+
+DagsHub requires an authenticated DagsHub session before a repository can be created. After logging in, create the matching DagsHub project and push/mirror the same code and artifacts:
+
+```bash
+dagshub login --token <your-dagshub-token>
+dagshub repo create laliga-match-predictions-mlops
+git remote add dagshub https://dagshub.com/<dagshub-user>/laliga-match-predictions-mlops.git
+git push dagshub main
+```
+
 ### Making Predictions From Python
 
 ```python

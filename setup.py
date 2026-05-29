@@ -11,6 +11,7 @@ setup(
         "scikit-learn",
         "xgboost",
         "mlflow",
+        "dagshub>=0.7.0",
         "prefect",
         "hyperopt",
         "dagshub",
