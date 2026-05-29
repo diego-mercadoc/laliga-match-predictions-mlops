@@ -70,6 +70,10 @@ def test_temporal_features_use_only_prior_matches():
     assert first["h2h_matches"] == 0
     assert first["market_sources_count"] == 1
     assert first["market_home_prob"] > first["market_away_prob"]
+    assert first["HC"] == 5
+    assert first["AC"] == 3
+    assert first["HY"] == 1
+    assert first["AY"] == 2
     assert second["home_matches_played"] == 1
     assert second["away_matches_played"] == 1
     assert second["home_points_per_match"] == 0

@@ -37,3 +37,12 @@ Pinnacle/PS direct columns are intentionally excluded from market-consensus feat
 - Ratings: internal Elo before the match, away Elo, and Elo difference with home advantage.
 - Matchup history: prior head-to-head points, goal differential, and sample size.
 - Market consensus: normalized home/draw/away implied probabilities, overround, entropy, source count, and over/under 2.5 probabilities.
+
+## Target Families
+
+- Match outcome: exact 1X2, home win, draw, away win, and double-chance variants.
+- Goals: over 0.5, over 1.5, over 2.5, over 3.5, under 5.5, under 6.5, both teams to score, home scores, away scores, and regression targets for home/away/total goals.
+- Corners: over 8.5, over 9.5, and total-corners regression.
+- Cards: yellow-card over 4.5, any red card, and total-yellow-card regression.
+
+Targets with very high majority rates are kept because they are operationally useful, but the benchmark flags them as imbalanced and reports balanced accuracy, F1, AUC, log-loss, and baseline rates next to raw accuracy.

@@ -432,6 +432,10 @@ async def home_page() -> str:
                 <span class="label">Experimentos multi-temporada</span>
                 <span class="hint">Comparar modelos, ventanas y filtrar predicciones por equipo.</span>
               </a>
+              <a class="action" href="/targets/latest">
+                <span class="label">Targets adicionales</span>
+                <span class="hint">Ver accuracy, F1, AUC, MAE y targets de goles, corners y tarjetas.</span>
+              </a>
               <a class="action" href="/refresh/status">
                 <span class="label">Estado de refresh</span>
                 <span class="hint">Ver cuándo se actualizaron los datos y modelos.</span>
@@ -591,6 +595,107 @@ async def latest_experiments_page(team: Optional[str] = Query(None)) -> str:
         {experiments_table}
         <h2>Predicciones 2025/26{title_suffix}</h2>
         {predictions_table}
+      </div>
+    </body>
+    </html>
+    """
+
+
+@app.get("/targets/latest", response_class=HTMLResponse, include_in_schema=False)
+async def latest_targets_page() -> str:
+    repo_root = Path(__file__).resolve().parents[2]
+    output_dir = repo_root / "artifacts" / "multi_target"
+    summary_path = output_dir / "summary.json"
+    results_path = output_dir / "target_results.csv"
+
+    if not summary_path.exists() or not results_path.exists():
+        return """
+        <!doctype html>
+        <html lang="es"><head><meta charset="utf-8"><title>Targets no disponibles</title></head>
+        <body style="font-family:system-ui;margin:32px">
+          <h1>Targets no disponibles</h1>
+          <p>Ejecuta <code>py -3.11 src\\backend\\services\\multi_target_experiments.py</code> para generar el reporte.</p>
+          <p><a href="/">Volver</a></p>
+        </body></html>
+        """
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    results = pd.read_csv(results_path)
+    classification = results[results["task_type"] == "classification"].copy()
+    regression = results[results["task_type"] == "regression"].copy()
+    classification = classification.sort_values(["selection_metric", "accuracy"], ascending=False)
+    regression = regression.sort_values("selection_metric", ascending=False)
+
+    class_table = classification[
+        [
+            "target",
+            "model_name",
+            "accuracy",
+            "balanced_accuracy",
+            "f1_weighted",
+            "roc_auc",
+            "majority_class_rate",
+            "notes",
+        ]
+    ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
+    reg_table = regression[
+        ["target", "model_name", "mae", "rmse", "r2", "baseline_metric", "selection_metric"]
+    ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
+
+    best_accuracy = summary["best_accuracy_target"]
+    best_balanced = summary["best_balanced_target"]
+    best_regression = summary["best_regression_target"]
+    return f"""
+    <!doctype html>
+    <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Targets adicionales</title>
+      <style>
+        body {{
+          margin: 0;
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          color: #17202a;
+          background: #f5f7fa;
+        }}
+        .wrap {{ max-width: 1220px; margin: 0 auto; padding: 28px 24px; }}
+        h1 {{ margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0; }}
+        p {{ color: #5f6b7a; line-height: 1.5; }}
+        .metrics {{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }}
+        .metric, .panel {{ background: #fff; border: 1px solid #d8dee7; border-radius: 8px; padding: 16px; }}
+        .metric span {{ display: block; color: #5f6b7a; font-size: 13px; }}
+        .metric strong {{ display: block; margin-top: 6px; font-size: 22px; overflow-wrap: anywhere; }}
+        table.results {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #d8dee7; border-radius: 8px; overflow: hidden; }}
+        .results th, .results td {{ border-bottom: 1px solid #e7ebf0; padding: 10px 12px; text-align: left; font-size: 13px; }}
+        .results th {{ background: #edf1f6; }}
+        code {{ background: #edf1f6; border-radius: 5px; padding: 2px 5px; }}
+        a {{ color: #0f766e; font-weight: 700; }}
+        @media (max-width: 820px) {{
+          .wrap {{ padding: 22px 16px; }}
+          .metrics {{ grid-template-columns: 1fr; }}
+          table.results {{ display: block; overflow-x: auto; }}
+        }}
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <p><a href="/">Volver</a></p>
+        <h1>Targets adicionales</h1>
+        <p>Benchmark fuera de muestra para temporada 2025/26 desde <strong>{summary["split_date"]}</strong>. La selección principal usa métricas balanceadas; accuracy alta por clases muy desbalanceadas se marca explícitamente.</p>
+        <div class="metrics">
+          <div class="metric"><span>Targets</span><strong>{summary["target_count"]}</strong></div>
+          <div class="metric"><span>Mayor accuracy</span><strong>{best_accuracy["target"]}: {best_accuracy["accuracy"]:.1%}</strong></div>
+          <div class="metric"><span>Mejor métrica balanceada</span><strong>{best_balanced["target"]}: {best_balanced["selection_metric"]:.3f}</strong></div>
+          <div class="metric"><span>Mejor regresión</span><strong>{best_regression["target"]}: MAE {best_regression["mae"]:.2f}</strong></div>
+        </div>
+        <div class="panel">
+          <p><strong>Lectura rápida:</strong> <code>{best_accuracy["target"]}</code> llega a {best_accuracy["accuracy"]:.1%} de accuracy, pero revisa <code>balanced_accuracy</code> y la nota de desbalance antes de venderlo como modelo fuerte. Para targets deportivos menos triviales, usa F1, AUC, log-loss y MAE.</p>
+        </div>
+        <h2>Clasificación</h2>
+        {class_table}
+        <h2>Regresión</h2>
+        {reg_table}
       </div>
     </body>
     </html>

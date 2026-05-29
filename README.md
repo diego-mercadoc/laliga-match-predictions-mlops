@@ -186,6 +186,8 @@ A scheduled Codex automation named `Refresh LaLiga multi-season data` runs Tuesd
 
 The multi-season pipeline now validates every source file and writes a source manifest to `artifacts/multi_season/data_source_report.json`. Feature engineering includes leakage-safe Elo, season rank before kickoff, 3/5/10-match rolling form, head-to-head history, rest days, shot efficiency, and normalized market-implied probabilities from Football-Data odds. See `docs/data_sources.md` for the source rules and leakage policy.
 
+The refresh also runs a multi-target benchmark under `artifacts/multi_target`. It evaluates match result, home/away/draw events, double chance, goal totals, both-teams-score, corners, yellow cards, red cards, and regression targets for goals/corners/cards. Use `/targets/latest` to inspect accuracy, balanced accuracy, F1, AUC, log-loss, MAE, and baseline comparisons. Accuracy above 85% is possible on highly stable targets such as low total-goal ceilings, but those rows are flagged when class imbalance makes raw accuracy misleading.
+
 ### GitHub And DagsHub Publishing
 
 The MLOps-ready GitHub remote is:

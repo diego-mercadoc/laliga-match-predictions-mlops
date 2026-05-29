@@ -16,6 +16,7 @@ from services.multi_season_experiments import (
     download_football_data,
     run_multi_season_experiments,
 )
+from services.multi_target_experiments import run_multi_target_experiments
 
 
 STATUS_FILENAME = "refresh_status.json"
@@ -80,6 +81,7 @@ def run_refresh_pipeline(
         ]
 
         run_result = None
+        target_result = None
         if not skip_experiments:
             run_result = run_multi_season_experiments(
                 root,
@@ -87,6 +89,7 @@ def run_refresh_pipeline(
                 current_season=CURRENT_SEASON,
                 force_download=False,
             )
+            target_result = run_multi_target_experiments(root, current_season=CURRENT_SEASON)
 
         completed_at = _utc_now()
         payload: Dict[str, object] = {
@@ -105,6 +108,13 @@ def run_refresh_pipeline(
                 "train_current_rows": run_result.train_current_rows,
                 "test_current_rows": run_result.test_current_rows,
                 "best_experiment": asdict(run_result.best_experiment),
+            }
+        if target_result:
+            payload["multi_target_summary"] = {
+                "target_count": target_result["target_count"],
+                "best_accuracy_target": target_result["best_accuracy_target"],
+                "best_balanced_target": target_result["best_balanced_target"],
+                "best_regression_target": target_result["best_regression_target"],
             }
         _write_status(root, payload)
         return payload

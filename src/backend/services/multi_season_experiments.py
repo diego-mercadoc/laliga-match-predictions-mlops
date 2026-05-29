@@ -497,6 +497,12 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
             "FTHG": int(match["FTHG"]),
             "FTAG": int(match["FTAG"]),
             "FTR": str(match["FTR"]),
+            "HC": 0 if pd.isna(match.get("HC")) else int(match.get("HC")),
+            "AC": 0 if pd.isna(match.get("AC")) else int(match.get("AC")),
+            "HY": 0 if pd.isna(match.get("HY")) else int(match.get("HY")),
+            "AY": 0 if pd.isna(match.get("AY")) else int(match.get("AY")),
+            "HR": 0 if pd.isna(match.get("HR")) else int(match.get("HR")),
+            "AR": 0 if pd.isna(match.get("AR")) else int(match.get("AR")),
             "matchday": max(
                 season_team_matches.get((season, home), 0),
                 season_team_matches.get((season, away), 0),
