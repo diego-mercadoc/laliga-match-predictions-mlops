@@ -1,6 +1,6 @@
 import pandas as pd
 
-from services.multi_target_experiments import CLASSIFICATION_TARGETS, REGRESSION_TARGETS
+from services.multi_target_experiments import CLASSIFICATION_TARGETS, REGRESSION_TARGETS, _best_binary_threshold
 
 
 def test_multi_target_definitions_cover_result_goals_corners_and_cards():
@@ -31,3 +31,12 @@ def test_multi_target_definitions_cover_result_goals_corners_and_cards():
     assert REGRESSION_TARGETS["total_goals"](matches).iloc[0] == 3
     assert REGRESSION_TARGETS["total_corners"](matches).iloc[0] == 11
     assert REGRESSION_TARGETS["total_yellow_cards"](matches).iloc[0] == 5
+
+
+def test_best_binary_threshold_optimizes_for_balanced_signal():
+    y_true = pd.Series([0, 0, 0, 1, 1])
+    positive_probability = pd.Series([0.10, 0.20, 0.40, 0.35, 0.80]).to_numpy()
+
+    threshold = _best_binary_threshold(y_true, positive_probability)
+
+    assert 0.20 <= threshold <= 0.40

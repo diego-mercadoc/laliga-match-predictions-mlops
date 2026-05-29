@@ -623,7 +623,11 @@ async def latest_targets_page() -> str:
     results = pd.read_csv(results_path)
     classification = results[results["task_type"] == "classification"].copy()
     regression = results[results["task_type"] == "regression"].copy()
-    classification = classification.sort_values(["selection_metric", "accuracy"], ascending=False)
+    classification["usable_target"] = (
+        ~classification["imbalance_flag"].fillna(False)
+        & (classification["baseline_accuracy_delta"].fillna(-1.0) > -0.02)
+    )
+    classification = classification.sort_values(["usable_target", "selection_metric", "accuracy"], ascending=False)
     regression = regression.sort_values("selection_metric", ascending=False)
 
     class_table = classification[
@@ -634,7 +638,11 @@ async def latest_targets_page() -> str:
             "balanced_accuracy",
             "f1_weighted",
             "roc_auc",
+            "target_rate",
             "majority_class_rate",
+            "baseline_accuracy_delta",
+            "decision_threshold",
+            "imbalance_flag",
             "notes",
         ]
     ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
@@ -643,8 +651,10 @@ async def latest_targets_page() -> str:
     ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
 
     best_accuracy = summary["best_accuracy_target"]
+    best_raw_accuracy = summary.get("best_raw_accuracy_target", best_accuracy)
     best_balanced = summary["best_balanced_target"]
     best_regression = summary["best_regression_target"]
+    imbalanced_targets = summary.get("imbalanced_classification_targets", int(classification["imbalance_flag"].fillna(False).sum()))
     return f"""
     <!doctype html>
     <html lang="es">
@@ -682,15 +692,16 @@ async def latest_targets_page() -> str:
       <div class="wrap">
         <p><a href="/">Volver</a></p>
         <h1>Targets adicionales</h1>
-        <p>Benchmark fuera de muestra para temporada 2025/26 desde <strong>{summary["split_date"]}</strong>. La selección principal usa métricas balanceadas; accuracy alta por clases muy desbalanceadas se marca explícitamente.</p>
+        <p>Benchmark fuera de muestra para temporada 2025/26 desde <strong>{summary["split_date"]}</strong>. La selección principal usa métricas balanceadas, umbrales tuneados en validación temporal y comparación contra baseline de clase mayoritaria.</p>
         <div class="metrics">
           <div class="metric"><span>Targets</span><strong>{summary["target_count"]}</strong></div>
-          <div class="metric"><span>Mayor accuracy</span><strong>{best_accuracy["target"]}: {best_accuracy["accuracy"]:.1%}</strong></div>
-          <div class="metric"><span>Mejor métrica balanceada</span><strong>{best_balanced["target"]}: {best_balanced["selection_metric"]:.3f}</strong></div>
-          <div class="metric"><span>Mejor regresión</span><strong>{best_regression["target"]}: MAE {best_regression["mae"]:.2f}</strong></div>
+          <div class="metric"><span>Mejor target útil</span><strong>{best_accuracy["target"]}: {best_accuracy["accuracy"]:.1%}</strong></div>
+          <div class="metric"><span>Raw accuracy audit</span><strong>{best_raw_accuracy["target"]}: {best_raw_accuracy["accuracy"]:.1%}</strong></div>
+          <div class="metric"><span>Desbalanceados</span><strong>{imbalanced_targets}</strong></div>
         </div>
         <div class="panel">
-          <p><strong>Lectura rápida:</strong> <code>{best_accuracy["target"]}</code> llega a {best_accuracy["accuracy"]:.1%} de accuracy, pero revisa <code>balanced_accuracy</code> y la nota de desbalance antes de venderlo como modelo fuerte. Para targets deportivos menos triviales, usa F1, AUC, log-loss y MAE.</p>
+          <p><strong>Lectura rápida:</strong> <code>{best_balanced["target"]}</code> es el mejor target por métrica balanceada ({best_balanced["selection_metric"]:.3f}). <code>{best_raw_accuracy["target"]}</code> puede mostrar accuracy alta, pero queda separado como auditoría cruda si depende de una clase dominante. Para clasificación usa <code>balanced_accuracy</code>, <code>baseline_accuracy_delta</code>, AUC y el umbral; para regresión, MAE contra baseline.</p>
+          <p><strong>Mejor regresión:</strong> <code>{best_regression["target"]}</code> con MAE {best_regression["mae"]:.2f}.</p>
         </div>
         <h2>Clasificación</h2>
         {class_table}
