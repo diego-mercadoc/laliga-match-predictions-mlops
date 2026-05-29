@@ -2,315 +2,133 @@
 
 ## Overview
 
-The LaLiga Predictions API provides endpoints for predicting various outcomes in Spanish La Liga football matches, including match results, goals scored, corners awarded, and yellow cards received. The API is built with FastAPI and follows RESTful principles.
+The backend is served from `api.py` and uses a PySpark pipeline to build the same 48-column model feature contract used by the original notebook. FBref data is validated before any prediction is attempted.
 
 ## Base URL
 
-```
+```text
 http://localhost:8000
 ```
 
 ## Authentication
 
-The API uses JWT (JSON Web Token) authentication. Include the token in the Authorization header:
+Local development is open by default. If `API_KEY` is set, send it with each protected request:
 
-```
-Authorization: Bearer <your_token>
+```http
+X-API-Key: <your-api-key>
 ```
 
 ## Endpoints
 
-### 1. Predictions
+### Health
 
-#### Make a Prediction
+```http
+GET /health
+```
+
+Returns API health, pipeline type, feature count, and lazy MLflow model metadata.
+
+### Data Quality
+
+```http
+GET /data/quality?jornada=12
+X-API-Key: <your-api-key>
+```
+
+Validates FBref schedule and statistics after PySpark joins. The report includes missing feature columns, null counts, duplicate rows, and self-match rows.
+
+### Feature Preview
+
+```http
+GET /features/preview?jornada=12&limit=5
+X-API-Key: <your-api-key>
+```
+
+Returns model-ready rows, the expected feature columns, and the data-quality report. This endpoint is useful for debugging the ETL without loading MLflow.
+
+### Predict
+
 ```http
 POST /predict
 Content-Type: application/json
-Authorization: Bearer <your_token>
+X-API-Key: <your-api-key>
 
 {
-  "home_team": "Real Madrid",
-  "away_team": "Barcelona",
-  "date": "2024-01-20",
-  "home_form": [1, 1, 0, 1, 0],
-  "away_form": [1, 1, 1, 0, 1],
-  "head_to_head": [1, 0, 1, 1, 0]
+  "jornada": 12,
+  "impute_missing": true
 }
 ```
 
-Response:
+`/predict` validates the PySpark feature frame, optionally imputes numeric NULL/NaN feature values with per-column medians, loads MLflow lazily, and returns one prediction row per team view.
+
 ```json
 {
-  "match_outcome": {
-    "home_win_probability": 0.45,
-    "draw_probability": 0.25,
-    "away_win_probability": 0.30
-  },
-  "goals_prediction": {
-    "home_goals": 2,
-    "away_goals": 1
-  },
-  "corners_prediction": {
-    "home_corners": 5,
-    "away_corners": 4
-  },
-  "cards_prediction": {
-    "home_yellow_cards": 2,
-    "away_yellow_cards": 3
-  },
-  "confidence_score": 0.85,
-  "model_version": "production"
-}
-```
-
-### 2. Model Performance
-
-#### Get Model Performance Metrics
-```http
-GET /model/performance
-Authorization: Bearer <your_token>
-```
-
-Response:
-```json
-{
-  "accuracy": 0.82,
-  "precision": 0.79,
-  "recall": 0.81,
-  "f1_score": 0.80,
-  "predictions_count": 1000,
-  "last_retrained": "2024-01-10T00:00:00Z",
-  "drift_score": 0.05
-}
-```
-
-#### Get Feature Importance
-```http
-GET /model/feature-importance
-Authorization: Bearer <your_token>
-```
-
-Response:
-```json
-{
-  "features": [
+  "jornada": 12,
+  "predictions": [
     {
-      "name": "home_form",
-      "importance": 0.25
-    },
-    {
-      "name": "away_form",
-      "importance": 0.23
-    },
-    {
-      "name": "head_to_head",
-      "importance": 0.20
+      "Anfitrion": "Barcelona",
+      "Adversario": "Real Madrid",
+      "Sedes": 1,
+      "Probabilidad_Victoria": 0.45,
+      "Probabilidad_Empate": 0.25,
+      "Probabilidad_Derrota": 0.3,
+      "Goles_Predichos_Local": 1.8,
+      "Goles_Predichos_Visitante": 1.2
     }
-  ]
+  ],
+  "data_quality": {
+    "is_valid": true,
+    "issue_count": 0,
+    "issues": []
+  },
+  "imputation": {
+    "strategy": "median",
+    "filled_counts": {},
+    "fill_values": {},
+    "total_filled": 0
+  },
+  "model_version": "runs:/e8e41ab35bd34545a81ccb039080a64c/model",
+  "feature_count": 48,
+  "generated_at": "2026-05-28T00:00:00Z"
 }
 ```
 
-### 3. Model Management
+If MLflow or DagsHub credentials are missing, `/predict` returns `503` with a clear configuration message. `/health`, `/data/quality`, and `/features/preview` do not require model access.
 
-#### Get Model Status
+### Refresh Status
+
 ```http
-GET /model/status
-Authorization: Bearer <your_token>
+GET /refresh/status
 ```
 
-Response:
-```json
+Returns the latest data-refresh manifest from `artifacts/multi_season/refresh_status.json`.
+
+### Start Refresh
+
+```http
+POST /refresh/run
+Content-Type: application/json
+X-API-Key: <your-api-key>
+
 {
-  "status": "healthy",
-  "version": "production",
-  "last_updated": "2024-01-10T00:00:00Z",
-  "total_predictions": 1000,
-  "average_latency": 0.15
+  "force_download": true,
+  "skip_experiments": false
 }
 ```
+
+Starts the refresh pipeline in a background Python process. It updates raw Football-Data CSVs, rebuilds features, reruns experiments, and regenerates prediction artifacts.
+
+## Runtime Configuration
+
+- `MLFLOW_TRACKING_URI`: defaults to `https://dagshub.com/JuanPab2009/ProyectoFinalCD.mlflow`
+- `MLFLOW_MODEL_URI`: defaults to `runs:/e8e41ab35bd34545a81ccb039080a64c/model`
+- `API_KEY`: optional local API key
+
+For private DagsHub/MLflow access, configure the username/token environment variables accepted by MLflow before calling `/predict`.
 
 ## Error Handling
 
-The API uses standard HTTP status codes and returns detailed error messages:
-
-### Common Error Codes
-
-- `400 Bad Request`: Invalid input data
-- `401 Unauthorized`: Missing or invalid authentication
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Resource not found
-- `422 Unprocessable Entity`: Validation error
-- `429 Too Many Requests`: Rate limit exceeded
-- `500 Internal Server Error`: Server error
-
-Example Error Response:
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Invalid team name provided",
-    "details": {
-      "field": "home_team",
-      "reason": "Team not found in database"
-    }
-  }
-}
-```
-
-## Rate Limiting
-
-The API implements rate limiting to ensure fair usage:
-
-- 100 requests per minute per IP address
-- Rate limit headers are included in responses:
-  ```
-  X-RateLimit-Limit: 100
-  X-RateLimit-Remaining: 95
-  X-RateLimit-Reset: 1704870000
-  ```
-
-## Troubleshooting Guide
-
-### Common Issues
-
-1. Authentication Failures
-   - Check if the token is valid and not expired
-   - Ensure the token is included in the Authorization header
-   - Verify the token format: `Bearer <token>`
-
-2. Invalid Input Data
-   - Verify team names match exactly with the database
-   - Ensure date format is YYYY-MM-DD
-   - Check that arrays (form, head_to_head) have correct length
-
-3. Rate Limiting
-   - Implement exponential backoff
-   - Cache frequently requested data
-   - Consider upgrading to a higher tier if needed
-
-4. High Latency
-   - Check network connectivity
-   - Verify server load
-   - Consider using batch predictions for multiple matches
-
-### Monitoring
-
-The API provides monitoring endpoints:
-
-```http
-GET /metrics
-```
-
-Key metrics to monitor:
-- Request latency
-- Error rates
-- Prediction accuracy
-- Model drift
-- Resource usage
-
-### Logging
-
-Logs are in JSON format and include:
-- Request ID
-- Timestamp
-- User ID
-- Endpoint
-- Response time
-- Error details (if any)
-
-## Best Practices
-
-1. Prediction Requests
-   - Batch predictions when possible
-   - Include all available features for better accuracy
-   - Handle prediction confidence scores appropriately
-
-2. Error Handling
-   - Implement retry logic with exponential backoff
-   - Log all errors for debugging
-   - Handle edge cases gracefully
-
-3. Performance
-   - Cache frequently used data
-   - Use compression for large requests
-   - Monitor response times and error rates
-
-## Example Usage Scenarios
-
-### 1. Match Outcome Prediction
-
-```python
-import requests
-
-def predict_match(home_team, away_team, date):
-    url = "http://localhost:8000/predict"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "home_team": home_team,
-        "away_team": away_team,
-        "date": date,
-        "home_form": [1, 1, 0, 1, 0],
-        "away_form": [1, 1, 1, 0, 1],
-        "head_to_head": [1, 0, 1, 1, 0]
-    }
-    
-    response = requests.post(url, json=data, headers=headers)
-    return response.json()
-
-# Example usage
-prediction = predict_match("Real Madrid", "Barcelona", "2024-01-20")
-print(prediction)
-```
-
-### 2. Model Performance Monitoring
-
-```python
-import requests
-from datetime import datetime, timedelta
-
-def monitor_model_performance():
-    url = "http://localhost:8000/model/performance"
-    headers = {"Authorization": f"Bearer {token}"}
-    
-    response = requests.get(url, headers=headers)
-    metrics = response.json()
-    
-    # Alert if accuracy drops below threshold
-    if metrics["accuracy"] < 0.7:
-        send_alert("Low model accuracy detected")
-    
-    # Check for model drift
-    if metrics["drift_score"] > 0.3:
-        schedule_retraining()
-    
-    return metrics
-
-# Run monitoring hourly
-while True:
-    metrics = monitor_model_performance()
-    print(f"Current model accuracy: {metrics['accuracy']}")
-    time.sleep(3600)
-```
-
-## Support
-
-For additional support:
-- Check the logs for detailed error messages
-- Monitor the `/metrics` endpoint for system health
-- Contact the development team for persistent issues
-
-## Updates and Maintenance
-
-The API is regularly updated with:
-- Model retraining (weekly)
-- Performance improvements
-- Bug fixes
-- New features
-
-Stay updated with the latest changes by monitoring the version endpoint:
-```http
-GET /version
-``` 
+- `403`: `API_KEY` is configured and the request did not include the right `X-API-Key`
+- `422`: FBref data could not produce a valid feature frame
+- `503`: MLflow model could not be loaded
+- `500`: unexpected server error

@@ -1,0 +1,93 @@
+{
+  "split": {
+    "train_rows": 13,
+    "test_rows": 25,
+    "cutoff_index": 13,
+    "cutoff_date": "2023-11-12",
+    "reason": "Temporal split around the first 40% of the season, after all target classes are represented but before the final table is clear."
+  },
+  "metrics": {
+    "accuracy": 0.64,
+    "f1_weighted": 0.5307317073170732,
+    "test_rows": 25.0,
+    "train_rows": 13.0,
+    "model_family": "spark_random_forest"
+  },
+  "confusion_matrix": [
+    {
+      "Resultado_label": "Derrota",
+      "Prediccion_label": "Victoria",
+      "count": 4
+    },
+    {
+      "Resultado_label": "Empate",
+      "Prediccion_label": "Victoria",
+      "count": 4
+    },
+    {
+      "Resultado_label": "Victoria",
+      "Prediccion_label": "Empate",
+      "count": 1
+    },
+    {
+      "Resultado_label": "Victoria",
+      "Prediccion_label": "Victoria",
+      "count": 16
+    }
+  ],
+  "imputation": {
+    "strategy": "median",
+    "filled_counts": {
+      "Edad(opp)": 6,
+      "Pos.(opp)": 6,
+      "Ass(opp)": 6,
+      "TPint(opp)": 6,
+      "PrgC(opp)": 6,
+      "PrgP(opp)": 6,
+      "% de TT(opp)": 6,
+      "Dist(opp)": 6,
+      "% Cmp(opp)": 6,
+      "Dist. tot.(opp)": 6,
+      "TklG(opp)": 6,
+      "Int(opp)": 6,
+      "Err(opp)": 6,
+      "RL(opp)": 6,
+      "PG(opp)": 6,
+      "PE(opp)": 6,
+      "PP(opp)": 6,
+      "GF(opp)": 6,
+      "GC(opp)": 6,
+      "xG(opp)": 6,
+      "xGA(opp)": 6,
+      "Últimos 5(opp)": 6,
+      "Máximo Goleador del Equipo(opp)": 6
+    },
+    "fill_values": {
+      "Edad(opp)": 27.7,
+      "Pos.(opp)": 55.2,
+      "Ass(opp)": 6.0,
+      "TPint(opp)": 1.0,
+      "PrgC(opp)": 101.0,
+      "PrgP(opp)": 258.0,
+      "% de TT(opp)": 35.7,
+      "Dist(opp)": 18.0,
+      "% Cmp(opp)": 81.5,
+      "Dist. tot.(opp)": 45433.0,
+      "TklG(opp)": 62.0,
+      "Int(opp)": 49.0,
+      "Err(opp)": 2.0,
+      "RL(opp)": 11.0,
+      "PG(opp)": 3.0,
+      "PE(opp)": 2.0,
+      "PP(opp)": 2.0,
+      "GF(opp)": 8.0,
+      "GC(opp)": 8.0,
+      "xG(opp)": 8.3,
+      "xGA(opp)": 8.1,
+      "Últimos 5(opp)": 9.0,
+      "Máximo Goleador del Equipo(opp)": 2.0
+    },
+    "total_filled": 138
+  },
+  "output_csv": "C:\\Users\\Diego\\Documents\\Documents\\ProyectoFinalCD\\artifacts\\backtests\\temporal_backtest_predictions.csv"
+}

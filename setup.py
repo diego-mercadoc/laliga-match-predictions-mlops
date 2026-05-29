@@ -6,6 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "pandas",
+        "pyspark>=3.5.0,<4.0.0",
         "numpy",
         "scikit-learn",
         "xgboost",
@@ -19,4 +20,5 @@ setup(
         "python-dotenv",
         "pytest",
     ],
+    python_requires=">=3.11,<3.12",
 ) 

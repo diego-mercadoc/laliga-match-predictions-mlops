@@ -28,8 +28,9 @@ A comprehensive machine learning system for predicting various outcomes in Spani
 
 - **API Features**
   - RESTful endpoints
-  - JWT authentication
-  - Rate limiting
+  - Optional `X-API-Key` authentication through the `API_KEY` environment variable
+  - PySpark-based FBref feature pipeline
+  - Data-quality and feature-preview endpoints
   - Comprehensive error handling
   - Swagger/OpenAPI documentation
 
@@ -104,8 +105,8 @@ The system follows a microservices architecture with the following components:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/laliga-predictions.git
-   cd laliga-predictions
+   git clone https://github.com/JuanPab2009/ProyectoFinalCD.git
+   cd ProyectoFinalCD
    ```
 
 2. Create a `.env` file:
@@ -130,62 +131,95 @@ The system follows a microservices architecture with the following components:
 
 ## Usage
 
-### Making Predictions
+### Data Quality And Predictions
 
-```python
-import requests
+The production backend runs the PySpark API in `src/backend/api.py`. It prepares the same model feature contract as the original notebook, validates nulls, duplicate/self matches, and missing feature columns before serving predictions.
 
-def predict_match(home_team, away_team, date):
-    url = "http://localhost:8000/predict"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "home_team": home_team,
-        "away_team": away_team,
-        "date": date,
-        "home_form": [1, 1, 0, 1, 0],
-        "away_form": [1, 1, 1, 0, 1],
-        "head_to_head": [1, 0, 1, 1, 0]
-    }
-    
-    response = requests.post(url, json=data, headers=headers)
-    return response.json()
-
-# Example usage
-prediction = predict_match("Real Madrid", "Barcelona", "2024-01-20")
-print(prediction)
+```bash
+cd src
+docker-compose up -d backend
 ```
 
-### Monitoring Performance
+Check data quality for a jornada:
+
+```bash
+curl "http://localhost:8000/data/quality?jornada=12"
+```
+
+Preview the model-ready feature rows:
+
+```bash
+curl "http://localhost:8000/features/preview?jornada=12&limit=5"
+```
+
+Call predictions. Numeric NULL/NaN feature values are imputed with per-column medians by default and reported in the response:
+
+```bash
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"jornada": 12}'
+```
+
+For live MLflow predictions configure `MLFLOW_TRACKING_URI`, `MLFLOW_MODEL_URI`, and the DagsHub/MLflow credentials accepted by MLflow. Without those credentials, `/health`, `/data/quality`, and `/features/preview` still work, while `/predict` returns a clear `503`.
+
+### Automated Data Refresh
+
+Raw La Liga CSVs from Football-Data are cached under `data/raw/football_data`. The refresh runner can update the cache, rebuild temporal features, rerun the model comparison grid, and regenerate API artifacts:
+
+```bash
+py -3.11 src\backend\services\refresh_pipeline.py --force-download
+```
+
+For a lightweight raw-cache check without retraining:
+
+```bash
+py -3.11 src\backend\services\refresh_pipeline.py --skip-experiments
+```
+
+The API exposes the latest refresh state at:
+
+```bash
+curl http://localhost:8000/refresh/status
+```
+
+A scheduled Codex automation named `Refresh LaLiga multi-season data` runs Tuesdays and Fridays at 06:30.
+
+### Making Predictions From Python
 
 ```python
 import requests
-from datetime import datetime, timedelta
 
-def monitor_model_performance():
-    url = "http://localhost:8000/model/performance"
-    headers = {"Authorization": f"Bearer {token}"}
-    
+def predict_jornada(jornada):
+    url = "http://localhost:8000/predict"
+    headers = {"Content-Type": "application/json"}
+    data = {"jornada": jornada}
+    response = requests.post(url, json=data, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+prediction = predict_jornada(12)
+print(prediction["data_quality"])
+```
+
+### Monitoring Data Quality
+
+```python
+import requests
+
+def monitor_data_quality(jornada=12):
+    url = f"http://localhost:8000/data/quality?jornada={jornada}"
+    headers = {}  # Add {"X-API-Key": "..."} if API_KEY is configured.
     response = requests.get(url, headers=headers)
-    metrics = response.json()
+    response.raise_for_status()
+    report = response.json()
     
-    # Alert if accuracy drops below threshold
-    if metrics["accuracy"] < 0.7:
-        send_alert("Low model accuracy detected")
+    if not report["is_valid"]:
+        send_alert({"jornada": jornada, "issues": report["issues"]})
     
-    # Check for model drift
-    if metrics["drift_score"] > 0.3:
-        schedule_retraining()
-    
-    return metrics
+    return report
 
-# Run monitoring hourly
-while True:
-    metrics = monitor_model_performance()
-    print(f"Current model accuracy: {metrics['accuracy']}")
-    time.sleep(3600)
+quality = monitor_data_quality(12)
+print(quality["issue_count"])
 ```
 
 ## Development
@@ -204,6 +238,8 @@ while True:
 │   └── Preprocesamiento.ipynb
 ├── src/
 │   ├── backend/
+│   │   ├── api.py
+│   │   ├── services/
 │   │   ├── main.py
 │   │   ├── requirements.txt
 │   │   └── utils/
