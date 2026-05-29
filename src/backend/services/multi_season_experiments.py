@@ -27,22 +27,18 @@ MARKET_ODDS_GROUPS = [
     ("AvgCH", "AvgCD", "AvgCA"),
     ("MaxCH", "MaxCD", "MaxCA"),
     ("B365CH", "B365CD", "B365CA"),
-    ("PSCH", "PSCD", "PSCA"),
     ("AvgH", "AvgD", "AvgA"),
     ("MaxH", "MaxD", "MaxA"),
     ("B365H", "B365D", "B365A"),
-    ("PSH", "PSD", "PSA"),
 ]
 
 TOTAL_GOALS_ODDS_GROUPS = [
     ("AvgC>2.5", "AvgC<2.5"),
     ("MaxC>2.5", "MaxC<2.5"),
     ("B365C>2.5", "B365C<2.5"),
-    ("PC>2.5", "PC<2.5"),
     ("Avg>2.5", "Avg<2.5"),
     ("Max>2.5", "Max<2.5"),
     ("B365>2.5", "B365<2.5"),
-    ("P>2.5", "P<2.5"),
 ]
 
 MARKET_COLUMNS = sorted(

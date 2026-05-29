@@ -1,49 +1,49 @@
 {
   "state": "succeeded",
-  "started_at": "2026-05-29T19:02:56.863378+00:00",
-  "completed_at": "2026-05-29T19:08:54.150614+00:00",
+  "started_at": "2026-05-29T19:14:12.322066+00:00",
+  "completed_at": "2026-05-29T19:22:34.866010+00:00",
   "force_download": true,
   "skip_experiments": false,
   "raw_files": [
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1819.csv",
       "bytes": 92914,
-      "modified_at": "2026-05-29T19:02:58.987350+00:00"
+      "modified_at": "2026-05-29T19:14:16.490228+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1920.csv",
       "bytes": 171484,
-      "modified_at": "2026-05-29T19:03:00.115374+00:00"
+      "modified_at": "2026-05-29T19:14:17.685320+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2021.csv",
       "bytes": 171721,
-      "modified_at": "2026-05-29T19:03:01.249687+00:00"
+      "modified_at": "2026-05-29T19:14:18.848448+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2122.csv",
       "bytes": 172174,
-      "modified_at": "2026-05-29T19:03:02.425552+00:00"
+      "modified_at": "2026-05-29T19:14:20.056359+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2223.csv",
       "bytes": 172199,
-      "modified_at": "2026-05-29T19:03:03.563429+00:00"
+      "modified_at": "2026-05-29T19:14:21.240510+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2324.csv",
       "bytes": 168164,
-      "modified_at": "2026-05-29T19:03:05.708094+00:00"
+      "modified_at": "2026-05-29T19:14:22.386327+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2425.csv",
       "bytes": 192863,
-      "modified_at": "2026-05-29T19:03:06.910802+00:00"
+      "modified_at": "2026-05-29T19:14:23.619691+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2526.csv",
       "bytes": 197653,
-      "modified_at": "2026-05-29T19:03:08.113536+00:00"
+      "modified_at": "2026-05-29T19:14:24.823761+00:00"
     }
   ],
   "output_dir": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\artifacts\\multi_season",
@@ -53,24 +53,20 @@
     "train_current_rows": 152,
     "test_current_rows": 228,
     "best_experiment": {
-      "name": "last_8_logistic_regression_l2_recency_2",
+      "name": "last_4_logistic_regression_l2",
       "model_family": "logistic_regression",
-      "train_rows": 2812,
+      "train_rows": 1292,
       "test_rows": 228,
       "seasons": [
-        "1819",
-        "1920",
-        "2021",
-        "2122",
         "2223",
         "2324",
         "2425",
         "2526"
       ],
-      "accuracy": 0.5219298245614035,
-      "f1_weighted": 0.46136429000967394,
-      "log_loss_proxy": 0.9554014743628237,
-      "recency_half_life": 2.0,
+      "accuracy": 0.5,
+      "f1_weighted": 0.45848704401335977,
+      "log_loss_proxy": 0.9483605941693579,
+      "recency_half_life": null,
       "params": {
         "regParam": 0.08,
         "elasticNetParam": 0.0

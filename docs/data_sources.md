@@ -11,6 +11,8 @@
 
 Football-Data is the primary source because its CSVs are stable, historical, machine-readable, and include both match statistics and odds aligned to fixtures.
 
+Pinnacle/PS direct columns are intentionally excluded from market-consensus features because Football-Data warns that Pinnacle public API delivery became unreliable from July 2025. The pipeline uses consensus/maximum odds plus Bet365 columns instead.
+
 ### ClubElo
 
 - URL: `http://api.clubelo.com`

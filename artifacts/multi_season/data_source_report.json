@@ -11,15 +11,9 @@
     "market_columns_present": [
       "B365A",
       "B365D",
-      "B365H",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "B365H"
     ],
-    "market_column_count": 9,
+    "market_column_count": 3,
     "avg_closing_odds_coverage": 0.0
   },
   {
@@ -61,19 +55,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   },
   {
@@ -115,19 +99,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   },
   {
@@ -169,19 +143,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   },
   {
@@ -223,19 +187,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   },
   {
@@ -277,19 +231,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   },
   {
@@ -331,19 +275,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   },
   {
@@ -385,19 +319,9 @@
       "MaxCD",
       "MaxCH",
       "MaxD",
-      "MaxH",
-      "P<2.5",
-      "P>2.5",
-      "PC<2.5",
-      "PC>2.5",
-      "PSA",
-      "PSCA",
-      "PSCD",
-      "PSCH",
-      "PSD",
-      "PSH"
+      "MaxH"
     ],
-    "market_column_count": 40,
+    "market_column_count": 30,
     "avg_closing_odds_coverage": 1.0
   }
 ]
