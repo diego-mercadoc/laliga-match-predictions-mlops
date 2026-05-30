@@ -16,6 +16,7 @@ from services.multi_season_experiments import (
     download_football_data,
     run_multi_season_experiments,
 )
+from services.home_win_experiments import run_home_win_experiments
 from services.multi_target_experiments import run_multi_target_experiments
 
 
@@ -82,6 +83,7 @@ def run_refresh_pipeline(
 
         run_result = None
         target_result = None
+        home_win_result = None
         if not skip_experiments:
             run_result = run_multi_season_experiments(
                 root,
@@ -90,6 +92,7 @@ def run_refresh_pipeline(
                 force_download=False,
             )
             target_result = run_multi_target_experiments(root, current_season=CURRENT_SEASON)
+            home_win_result = run_home_win_experiments(root, current_season=CURRENT_SEASON)
 
         completed_at = _utc_now()
         payload: Dict[str, object] = {
@@ -118,6 +121,12 @@ def run_refresh_pipeline(
                 "best_raw_accuracy_target": target_result.get("best_raw_accuracy_target"),
                 "best_balanced_target": target_result["best_balanced_target"],
                 "best_regression_target": target_result["best_regression_target"],
+            }
+        if home_win_result:
+            payload["home_win_summary"] = {
+                "experiment_count": home_win_result["experiment_count"],
+                "best_by_validation": home_win_result["best_by_validation"],
+                "best_by_test_audit": home_win_result["best_by_test_audit"],
             }
         _write_status(root, payload)
         return payload

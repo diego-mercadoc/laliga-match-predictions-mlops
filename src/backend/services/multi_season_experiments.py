@@ -44,9 +44,21 @@ MARKET_ODDS_GROUPS = [
     ("AvgCH", "AvgCD", "AvgCA"),
     ("MaxCH", "MaxCD", "MaxCA"),
     ("B365CH", "B365CD", "B365CA"),
+    ("PSCH", "PSCD", "PSCA"),
     ("AvgH", "AvgD", "AvgA"),
     ("MaxH", "MaxD", "MaxA"),
     ("B365H", "B365D", "B365A"),
+    ("BbAvH", "BbAvD", "BbAvA"),
+    ("BbMxH", "BbMxD", "BbMxA"),
+    ("BWH", "BWD", "BWA"),
+    ("IWH", "IWD", "IWA"),
+    ("LBH", "LBD", "LBA"),
+    ("SBH", "SBD", "SBA"),
+    ("WHH", "WHD", "WHA"),
+    ("SJH", "SJD", "SJA"),
+    ("VCH", "VCD", "VCA"),
+    ("GBH", "GBD", "GBA"),
+    ("BSH", "BSD", "BSA"),
 ]
 
 TOTAL_GOALS_ODDS_GROUPS = [
@@ -144,6 +156,16 @@ FEATURE_COLUMNS = [
     "away_recent_10_corners",
     "home_home_points_per_match",
     "away_away_points_per_match",
+    "home_home_win_rate",
+    "home_home_goal_diff_per_match",
+    "home_home_goals_for_per_match",
+    "home_home_goals_against_per_match",
+    "home_home_shots_on_target_per_match",
+    "away_away_loss_rate",
+    "away_away_goal_diff_per_match",
+    "away_away_goals_for_per_match",
+    "away_away_goals_against_per_match",
+    "away_away_shots_on_target_per_match",
     "home_season_points_per_match",
     "away_season_points_per_match",
     "home_season_goal_diff_per_match",
@@ -165,11 +187,30 @@ FEATURE_COLUMNS = [
     "elo_diff",
     "home_rest_days",
     "away_rest_days",
+    "rest_days_diff",
+    "short_rest_home",
+    "short_rest_away",
     "matchday",
+    "points_ppm_diff",
+    "win_rate_diff",
+    "goal_diff_ppm_diff",
+    "shots_on_target_ppm_diff",
+    "corners_ppm_diff",
+    "conversion_rate_diff",
+    "season_points_ppm_diff",
+    "season_goal_diff_ppm_diff",
+    "recent_5_points_diff",
+    "recent_5_goal_diff_diff",
+    "recent_10_points_diff",
+    "recent_10_goal_diff_diff",
     "market_home_prob",
     "market_draw_prob",
     "market_away_prob",
     "market_home_advantage",
+    "market_home_vs_not_home_prob",
+    "market_home_favorite_margin",
+    "market_is_home_favorite",
+    "market_home_logit",
     "market_entropy",
     "market_overround",
     "market_sources_count",
@@ -432,6 +473,10 @@ def _market_features(match: pd.Series) -> Dict[str, float]:
         "market_draw_prob": draw_prob,
         "market_away_prob": away_prob,
         "market_home_advantage": home_prob - away_prob,
+        "market_home_vs_not_home_prob": home_prob - (draw_prob + away_prob),
+        "market_home_favorite_margin": home_prob - max(draw_prob, away_prob),
+        "market_is_home_favorite": 1.0 if home_prob >= max(draw_prob, away_prob) else 0.0,
+        "market_home_logit": math.log(max(home_prob, 1e-6) / max(1.0 - home_prob, 1e-6)),
         "market_entropy": entropy,
         "market_overround": overround,
         "market_sources_count": float(len(implied_rows)),
@@ -473,6 +518,28 @@ def _h2h_features(matches: List[Dict[str, float]], home: str) -> Dict[str, float
         "h2h_home_points_per_match": points / count,
         "h2h_home_goal_diff_per_match": goal_diff / count,
         "h2h_matches": float(count),
+    }
+
+
+def _home_win_matchup_features(row: Dict[str, object]) -> Dict[str, float]:
+    home_goal_diff = float(row["home_goals_for_per_match"]) - float(row["home_goals_against_per_match"])
+    away_goal_diff = float(row["away_goals_for_per_match"]) - float(row["away_goals_against_per_match"])
+    return {
+        "rest_days_diff": float(row["home_rest_days"]) - float(row["away_rest_days"]),
+        "short_rest_home": 1.0 if float(row["home_rest_days"]) <= 3 else 0.0,
+        "short_rest_away": 1.0 if float(row["away_rest_days"]) <= 3 else 0.0,
+        "points_ppm_diff": float(row["home_points_per_match"]) - float(row["away_points_per_match"]),
+        "win_rate_diff": float(row["home_win_rate"]) - float(row["away_win_rate"]),
+        "goal_diff_ppm_diff": home_goal_diff - away_goal_diff,
+        "shots_on_target_ppm_diff": float(row["home_shots_on_target_per_match"]) - float(row["away_shots_on_target_per_match"]),
+        "corners_ppm_diff": float(row["home_corners_per_match"]) - float(row["away_corners_per_match"]),
+        "conversion_rate_diff": float(row["home_conversion_rate"]) - float(row["away_conversion_rate"]),
+        "season_points_ppm_diff": float(row["home_season_points_per_match"]) - float(row["away_season_points_per_match"]),
+        "season_goal_diff_ppm_diff": float(row["home_season_goal_diff_per_match"]) - float(row["away_season_goal_diff_per_match"]),
+        "recent_5_points_diff": float(row["home_recent_5_points_per_match"]) - float(row["away_recent_5_points_per_match"]),
+        "recent_5_goal_diff_diff": float(row["home_recent_5_goal_diff"]) - float(row["away_recent_5_goal_diff"]),
+        "recent_10_points_diff": float(row["home_recent_10_points_per_match"]) - float(row["away_recent_10_points_per_match"]),
+        "recent_10_goal_diff_diff": float(row["home_recent_10_goal_diff"]) - float(row["away_recent_10_goal_diff"]),
     }
 
 
@@ -562,6 +629,20 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
         away_away = _averages(away_only[away], "away_away")
         row["home_home_points_per_match"] = home_home["home_home_points_per_match"]
         row["away_away_points_per_match"] = away_away["away_away_points_per_match"]
+        row["home_home_win_rate"] = home_home["home_home_win_rate"]
+        row["home_home_goal_diff_per_match"] = (
+            home_home["home_home_goals_for_per_match"] - home_home["home_home_goals_against_per_match"]
+        )
+        row["home_home_goals_for_per_match"] = home_home["home_home_goals_for_per_match"]
+        row["home_home_goals_against_per_match"] = home_home["home_home_goals_against_per_match"]
+        row["home_home_shots_on_target_per_match"] = home_home["home_home_shots_on_target_per_match"]
+        row["away_away_loss_rate"] = away_away["away_away_loss_rate"]
+        row["away_away_goal_diff_per_match"] = (
+            away_away["away_away_goals_for_per_match"] - away_away["away_away_goals_against_per_match"]
+        )
+        row["away_away_goals_for_per_match"] = away_away["away_away_goals_for_per_match"]
+        row["away_away_goals_against_per_match"] = away_away["away_away_goals_against_per_match"]
+        row["away_away_shots_on_target_per_match"] = away_away["away_away_shots_on_target_per_match"]
 
         for team, prefix in [(home, "home"), (away, "away")]:
             recent_matches = recent[team][-5:]
@@ -574,6 +655,7 @@ def build_temporal_features(matches: pd.DataFrame) -> pd.DataFrame:
             for window in [3, 5, 10]:
                 row.update(_recent_window_features(recent[team], prefix, window))
 
+        row.update(_home_win_matchup_features(row))
         row["is_home_promoted_proxy"] = 1 if all_time[home]["matches"] < 15 and season != first_season else 0
         row["is_away_promoted_proxy"] = 1 if all_time[away]["matches"] < 15 and season != first_season else 0
         row["season_age"] = DEFAULT_SEASONS.index(season) if season in DEFAULT_SEASONS else 0
@@ -712,8 +794,10 @@ def run_experiment(
     split_date: str,
     config: ExperimentConfig,
     current_season: str = CURRENT_SEASON,
+    cached_features: Optional[DataFrame] = None,
 ) -> tuple[ExperimentResult, DataFrame, object]:
-    spark_features = spark.createDataFrame(features[features["Season"].isin(config.seasons)])
+    spark_features = cached_features if cached_features is not None else spark.createDataFrame(features)
+    spark_features = spark_features.filter(F.col("Season").isin(config.seasons))
     spark_features = _with_sample_weights(spark_features, config.recency_half_life)
     train = spark_features.filter(
         (F.col("Season") != current_season) | (F.to_date("Date") < F.lit(split_date))
@@ -812,11 +896,23 @@ def run_multi_season_experiments(
 
         experiment_results: List[ExperimentResult] = []
         best_tuple = None
-        for config in experiment_grid():
-            result, predictions, model = run_experiment(spark, features, split_date, config, current_season)
-            experiment_results.append(result)
-            if best_tuple is None or (result.log_loss_proxy, -result.accuracy) < (best_tuple[0].log_loss_proxy, -best_tuple[0].accuracy):
-                best_tuple = (result, predictions, model)
+        spark_features = spark.createDataFrame(features).cache()
+        spark_features.count()
+        try:
+            for config in experiment_grid():
+                result, predictions, model = run_experiment(
+                    spark,
+                    features,
+                    split_date,
+                    config,
+                    current_season,
+                    cached_features=spark_features,
+                )
+                experiment_results.append(result)
+                if best_tuple is None or (result.log_loss_proxy, -result.accuracy) < (best_tuple[0].log_loss_proxy, -best_tuple[0].accuracy):
+                    best_tuple = (result, predictions, model)
+        finally:
+            spark_features.unpersist()
 
         assert best_tuple is not None
         best_result, best_predictions, best_model = best_tuple

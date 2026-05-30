@@ -436,6 +436,10 @@ async def home_page() -> str:
                 <span class="label">Targets adicionales</span>
                 <span class="hint">Ver accuracy, F1, AUC, MAE y targets de goles, corners y tarjetas.</span>
               </a>
+              <a class="action" href="/home-win/latest">
+                <span class="label">Home win lab</span>
+                <span class="hint">Ver experimentos dedicados para victoria local.</span>
+              </a>
               <a class="action" href="/refresh/status">
                 <span class="label">Estado de refresh</span>
                 <span class="hint">Ver cuándo se actualizaron los datos y modelos.</span>
@@ -595,6 +599,94 @@ async def latest_experiments_page(team: Optional[str] = Query(None)) -> str:
         {experiments_table}
         <h2>Predicciones 2025/26{title_suffix}</h2>
         {predictions_table}
+      </div>
+    </body>
+    </html>
+    """
+
+
+@app.get("/home-win/latest", response_class=HTMLResponse, include_in_schema=False)
+async def latest_home_win_page() -> str:
+    repo_root = Path(__file__).resolve().parents[2]
+    output_dir = repo_root / "artifacts" / "home_win"
+    summary_path = output_dir / "summary.json"
+    results_path = output_dir / "experiment_results.csv"
+
+    if not summary_path.exists() or not results_path.exists():
+        return """
+        <!doctype html>
+        <html lang="es"><head><meta charset="utf-8"><title>Home win no disponible</title></head>
+        <body style="font-family:system-ui;margin:32px">
+          <h1>Home win no disponible</h1>
+          <p>Ejecuta <code>py -3.11 src\\backend\\services\\home_win_experiments.py</code> para generar el reporte.</p>
+          <p><a href="/">Volver</a></p>
+        </body></html>
+        """
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    results = pd.read_csv(results_path).sort_values(
+        ["validation_selection_metric", "test_selection_metric", "test_accuracy"],
+        ascending=False,
+    )
+    table = results.head(30)[
+        [
+            "name",
+            "model_name",
+            "feature_set",
+            "train_window",
+            "recency_half_life",
+            "validation_selection_metric",
+            "test_accuracy",
+            "test_balanced_accuracy",
+            "test_roc_auc",
+            "test_brier_score",
+            "decision_threshold",
+            "baseline_accuracy_delta",
+        ]
+    ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
+    best = summary["best_by_validation"]
+    audit = summary["best_by_test_audit"]
+    return f"""
+    <!doctype html>
+    <html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Home win lab</title>
+      <style>
+        body {{ margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17202a; background: #f5f7fa; }}
+        .wrap {{ max-width: 1280px; margin: 0 auto; padding: 28px 24px; }}
+        h1 {{ margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); letter-spacing: 0; }}
+        p {{ color: #5f6b7a; line-height: 1.5; }}
+        .metrics {{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }}
+        .metric, .panel {{ background: #fff; border: 1px solid #d8dee7; border-radius: 8px; padding: 16px; }}
+        .metric span {{ display: block; color: #5f6b7a; font-size: 13px; }}
+        .metric strong {{ display: block; margin-top: 6px; font-size: 22px; overflow-wrap: anywhere; }}
+        table.results {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #d8dee7; border-radius: 8px; overflow: hidden; }}
+        .results th, .results td {{ border-bottom: 1px solid #e7ebf0; padding: 10px 12px; text-align: left; font-size: 12px; }}
+        .results th {{ background: #edf1f6; }}
+        code {{ background: #edf1f6; border-radius: 5px; padding: 2px 5px; }}
+        a {{ color: #0f766e; font-weight: 700; }}
+        @media (max-width: 820px) {{ .wrap {{ padding: 22px 16px; }} .metrics {{ grid-template-columns: 1fr; }} table.results {{ display: block; overflow-x: auto; }} }}
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <p><a href="/">Volver</a></p>
+        <h1>Home win lab</h1>
+        <p>Experimentos dedicados a victoria local con selección por validación temporal robusta. El mejor por test se muestra sólo como auditoría, no como criterio de selección.</p>
+        <div class="metrics">
+          <div class="metric"><span>Experimentos</span><strong>{summary["experiment_count"]}</strong></div>
+          <div class="metric"><span>Mejor validación</span><strong>{best["test_accuracy"]:.1%} test</strong></div>
+          <div class="metric"><span>AUC / Brier</span><strong>{best["test_roc_auc"]:.3f} / {best["test_brier_score"]:.3f}</strong></div>
+          <div class="metric"><span>Audit test</span><strong>{audit["test_accuracy"]:.1%}</strong></div>
+        </div>
+        <div class="panel">
+          <p><strong>Modelo seleccionado:</strong> <code>{best["name"]}</code>. Ventana <code>{best["train_window"]}</code>, features <code>{best["feature_set"]}</code>, threshold {best["decision_threshold"]:.2f}.</p>
+          <p><strong>Mejor test audit:</strong> <code>{audit["name"]}</code>, accuracy {audit["test_accuracy"]:.1%}, AUC {audit["test_roc_auc"]:.3f}. Útil para diagnóstico, no para escoger ganador.</p>
+        </div>
+        <h2>Top experimentos</h2>
+        {table}
       </div>
     </body>
     </html>
