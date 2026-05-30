@@ -15,6 +15,7 @@ from sklearn.ensemble import ExtraTreesClassifier, GradientBoostingClassifier, H
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, brier_score_loss, f1_score, log_loss, roc_auc_score
+from sklearn.naive_bayes import GaussianNB
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils.class_weight import compute_sample_weight
@@ -131,6 +132,9 @@ def _model_factories() -> Dict[str, Callable[[], Pipeline]]:
     return {
         "logistic_l2_c1": lambda: _feature_pipeline(LogisticRegression(max_iter=800, C=1.0), scale=True),
         "logistic_l2_c03": lambda: _feature_pipeline(LogisticRegression(max_iter=800, C=0.3), scale=True),
+        "gaussian_nb_smoothing_1e9": lambda: _feature_pipeline(GaussianNB(var_smoothing=1e-9), scale=True),
+        "gaussian_nb_smoothing_1e7": lambda: _feature_pipeline(GaussianNB(var_smoothing=1e-7), scale=True),
+        "gaussian_nb_smoothing_1e5": lambda: _feature_pipeline(GaussianNB(var_smoothing=1e-5), scale=True),
         "histgb_l2_002": lambda: _feature_pipeline(
             HistGradientBoostingClassifier(max_iter=220, learning_rate=0.035, l2_regularization=0.02, random_state=42)
         ),
@@ -334,7 +338,18 @@ def run_home_win_experiments(
     if search_mode == "balanced":
         feature_sets = {name: feature_sets[name] for name in ["all_features", "compact", "form_market_elo", "market_only", "no_market"]}
         windows = {name: windows[name] for name in ["last_2", "last_4", "last_6", "last_8"]}
-        models = {name: models[name] for name in ["logistic_l2_c03", "histgb_l2_002", "histgb_l2_010", "extra_trees_depth8"]}
+        models = {
+            name: models[name]
+            for name in [
+                "logistic_l2_c03",
+                "gaussian_nb_smoothing_1e9",
+                "gaussian_nb_smoothing_1e7",
+                "gaussian_nb_smoothing_1e5",
+                "histgb_l2_002",
+                "histgb_l2_010",
+                "extra_trees_depth8",
+            ]
+        }
         recency_options = [None, 1.0, 2.0, 4.0]
     elif search_mode != "exhaustive":
         raise ValueError(f"Unsupported search mode: {search_mode}")
