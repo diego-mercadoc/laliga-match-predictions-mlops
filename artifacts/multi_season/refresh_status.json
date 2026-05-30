@@ -1,55 +1,95 @@
 {
   "state": "succeeded",
-  "started_at": "2026-05-29T21:02:46.313852+00:00",
-  "completed_at": "2026-05-29T21:10:22.380083+00:00",
-  "force_download": false,
+  "started_at": "2026-05-30T20:23:49.871478+00:00",
+  "completed_at": "2026-05-30T20:49:33.891341+00:00",
+  "force_download": true,
   "skip_experiments": false,
   "raw_files": [
     {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1011.csv",
+      "bytes": 103698,
+      "modified_at": "2026-05-30T20:23:51.167975+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1112.csv",
+      "bytes": 103977,
+      "modified_at": "2026-05-30T20:23:52.258518+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1213.csv",
+      "bytes": 110545,
+      "modified_at": "2026-05-30T20:23:53.440555+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1314.csv",
+      "bytes": 100249,
+      "modified_at": "2026-05-30T20:23:54.543837+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1415.csv",
+      "bytes": 97119,
+      "modified_at": "2026-05-30T20:23:55.659560+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1516.csv",
+      "bytes": 96045,
+      "modified_at": "2026-05-30T20:23:56.763364+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1617.csv",
+      "bytes": 96226,
+      "modified_at": "2026-05-30T20:23:58.003404+00:00"
+    },
+    {
+      "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1718.csv",
+      "bytes": 96801,
+      "modified_at": "2026-05-30T20:23:59.099587+00:00"
+    },
+    {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1819.csv",
       "bytes": 92914,
-      "modified_at": "2026-05-29T20:53:00.778627+00:00"
+      "modified_at": "2026-05-30T20:24:00.191728+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1920.csv",
       "bytes": 171484,
-      "modified_at": "2026-05-29T20:53:01.955070+00:00"
+      "modified_at": "2026-05-30T20:24:01.436516+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2021.csv",
       "bytes": 171721,
-      "modified_at": "2026-05-29T20:53:03.156729+00:00"
+      "modified_at": "2026-05-30T20:24:02.627028+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2122.csv",
       "bytes": 172174,
-      "modified_at": "2026-05-29T20:53:04.323515+00:00"
+      "modified_at": "2026-05-30T20:24:03.764904+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2223.csv",
       "bytes": 172199,
-      "modified_at": "2026-05-29T20:53:05.451299+00:00"
+      "modified_at": "2026-05-30T20:24:04.940208+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2324.csv",
       "bytes": 168164,
-      "modified_at": "2026-05-29T20:53:06.606963+00:00"
+      "modified_at": "2026-05-30T20:24:06.133644+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2425.csv",
       "bytes": 192863,
-      "modified_at": "2026-05-29T20:53:07.756422+00:00"
+      "modified_at": "2026-05-30T20:24:07.375868+00:00"
     },
     {
       "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_2526.csv",
       "bytes": 197653,
-      "modified_at": "2026-05-29T20:53:08.928478+00:00"
+      "modified_at": "2026-05-30T20:24:08.610566+00:00"
     }
   ],
   "output_dir": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\artifacts\\multi_season",
   "summary": {
     "split_date": "2025-12-12",
-    "data_rows": 3040,
+    "data_rows": 6080,
     "train_current_rows": 152,
     "test_current_rows": 228,
     "best_experiment": {
@@ -63,9 +103,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.45848704401335977,
-      "log_loss_proxy": 0.9483605941684765,
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.46729914314162707,
+      "log_loss_proxy": 0.9473063081090246,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -76,85 +116,96 @@
   "multi_target_summary": {
     "target_count": 24,
     "imbalanced_classification_targets": 4,
+    "audit_only_classification_targets": 3,
     "best_accuracy_target": {
       "target": "home_win",
       "task_type": "classification",
       "model_name": "logistic_l2_balanced",
-      "train_rows": 2812,
+      "train_rows": 5852,
       "test_rows": 228,
       "target_rate": 0.5,
+      "minority_class_rate": 0.5,
       "majority_class_rate": 0.5,
-      "accuracy": 0.6447368421052632,
-      "balanced_accuracy": 0.6447368421052632,
-      "f1_weighted": 0.6340288924558588,
-      "roc_auc": 0.6875961834410589,
-      "log_loss": 0.6369945867620733,
-      "brier_score": 0.2252826619025781,
+      "accuracy": 0.6403508771929824,
+      "balanced_accuracy": 0.6403508771929824,
+      "f1_weighted": 0.6356123801356514,
+      "roc_auc": 0.6923668821175746,
+      "log_loss": 0.6274841383977443,
+      "brier_score": 0.21923156408832908,
       "mae": null,
       "rmse": null,
       "r2": null,
       "baseline_metric": 0.5,
-      "baseline_accuracy_delta": 0.14473684210526316,
-      "selection_metric": 0.6559884520585912,
-      "decision_threshold": 0.62,
+      "baseline_accuracy_delta": 0.14035087719298245,
+      "selection_metric": 0.6552449041117605,
+      "decision_threshold": 0.5099999999999999,
       "imbalance_flag": false,
+      "actionable_target": true,
+      "rare_event_policy": "model_candidate",
       "notes": ""
     },
     "best_raw_accuracy_target": {
       "target": "under_6_5_goals",
       "task_type": "classification",
-      "model_name": "hist_gradient_boosting",
-      "train_rows": 2812,
+      "model_name": "logistic_l2_balanced",
+      "train_rows": 5852,
       "test_rows": 228,
       "target_rate": 0.9868421052631579,
+      "minority_class_rate": 0.013157894736842105,
       "majority_class_rate": 0.9868421052631579,
-      "accuracy": 0.9868421052631579,
-      "balanced_accuracy": 0.5,
-      "f1_weighted": 0.9803067270826071,
-      "roc_auc": 0.6177777777777778,
-      "log_loss": 0.10955439133442875,
-      "brier_score": 0.013552379209467953,
+      "accuracy": 0.9692982456140351,
+      "balanced_accuracy": 0.6555555555555556,
+      "f1_weighted": 0.9743121786569331,
+      "roc_auc": 0.5362962962962963,
+      "log_loss": 0.6345575121997762,
+      "brier_score": 0.21943450572509676,
       "mae": null,
       "rmse": null,
       "r2": null,
       "baseline_metric": 0.9868421052631579,
-      "baseline_accuracy_delta": 0.0,
-      "selection_metric": 0.6073793423957244,
-      "decision_threshold": 0.05,
+      "baseline_accuracy_delta": -0.01754385964912275,
+      "selection_metric": 0.5674525805565368,
+      "decision_threshold": 0.10999999999999999,
       "imbalance_flag": true,
-      "notes": "Imbalanced target; model selected by balanced metrics and tuned threshold, not raw accuracy. Does not beat majority-class accuracy baseline."
+      "actionable_target": false,
+      "rare_event_policy": "audit_only_low_minority_support",
+      "notes": "Imbalanced target; model selected by balanced metrics and tuned threshold, not raw accuracy. Audit-only target: minority support is 3 rows (1.3%) in the temporal test split. Does not beat majority-class accuracy baseline."
     },
     "best_balanced_target": {
       "target": "home_win",
       "task_type": "classification",
       "model_name": "logistic_l2_balanced",
-      "train_rows": 2812,
+      "train_rows": 5852,
       "test_rows": 228,
       "target_rate": 0.5,
+      "minority_class_rate": 0.5,
       "majority_class_rate": 0.5,
-      "accuracy": 0.6447368421052632,
-      "balanced_accuracy": 0.6447368421052632,
-      "f1_weighted": 0.6340288924558588,
-      "roc_auc": 0.6875961834410589,
-      "log_loss": 0.6369945867620733,
-      "brier_score": 0.2252826619025781,
+      "accuracy": 0.6403508771929824,
+      "balanced_accuracy": 0.6403508771929824,
+      "f1_weighted": 0.6356123801356514,
+      "roc_auc": 0.6923668821175746,
+      "log_loss": 0.6274841383977443,
+      "brier_score": 0.21923156408832908,
       "mae": null,
       "rmse": null,
       "r2": null,
       "baseline_metric": 0.5,
-      "baseline_accuracy_delta": 0.14473684210526316,
-      "selection_metric": 0.6559884520585912,
-      "decision_threshold": 0.62,
+      "baseline_accuracy_delta": 0.14035087719298245,
+      "selection_metric": 0.6552449041117605,
+      "decision_threshold": 0.5099999999999999,
       "imbalance_flag": false,
+      "actionable_target": true,
+      "rare_event_policy": "model_candidate",
       "notes": ""
     },
     "best_regression_target": {
       "target": "total_yellow_cards",
       "task_type": "regression",
-      "model_name": "extra_trees",
-      "train_rows": 2812,
+      "model_name": "ridge",
+      "train_rows": 5852,
       "test_rows": 228,
       "target_rate": null,
+      "minority_class_rate": null,
       "majority_class_rate": null,
       "accuracy": null,
       "balanced_accuracy": null,
@@ -162,14 +213,16 @@
       "roc_auc": null,
       "log_loss": null,
       "brier_score": null,
-      "mae": 1.7504495301933927,
-      "rmse": 2.2164017508900327,
-      "r2": 0.034919161466866466,
+      "mae": 1.7166939421576022,
+      "rmse": 2.2076749097710833,
+      "r2": 0.0425040016931163,
       "baseline_metric": 1.9035087719298245,
       "baseline_accuracy_delta": null,
-      "selection_metric": 0.15305924173643182,
+      "selection_metric": 0.1868148297722223,
       "decision_threshold": null,
       "imbalance_flag": false,
+      "actionable_target": true,
+      "rare_event_policy": "not_applicable",
       "notes": "Selection metric is baseline MAE improvement."
     }
   }

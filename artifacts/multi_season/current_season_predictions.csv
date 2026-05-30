@@ -10,7 +10,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2025-12-15 06:00:00,Vallecano,Betis,D,H,Empate,Local,False
 2025-12-19 06:00:00,Valencia,Mallorca,D,H,Empate,Local,False
 2025-12-20 06:00:00,Real Madrid,Sevilla,H,H,Local,Local,True
-2025-12-20 06:00:00,Oviedo,Celta,D,A,Empate,Visitante,False
+2025-12-20 06:00:00,Oviedo,Celta,D,D,Empate,Empate,True
 2025-12-20 06:00:00,Levante,Sociedad,D,D,Empate,Empate,True
 2025-12-20 06:00:00,Osasuna,Alaves,H,H,Local,Local,True
 2025-12-21 06:00:00,Betis,Getafe,H,H,Local,Local,True
@@ -24,18 +24,18 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-01-03 06:00:00,Elche,Villarreal,A,A,Visitante,Visitante,True
 2026-01-03 06:00:00,Celta,Valencia,H,H,Local,Local,True
 2026-01-04 06:00:00,Alaves,Oviedo,D,H,Empate,Local,False
-2026-01-04 06:00:00,Mallorca,Girona,A,D,Visitante,Empate,False
+2026-01-04 06:00:00,Mallorca,Girona,A,H,Visitante,Local,False
 2026-01-04 06:00:00,Real Madrid,Betis,H,H,Local,Local,True
 2026-01-04 06:00:00,Sevilla,Levante,A,H,Visitante,Local,False
 2026-01-04 06:00:00,Sociedad,Ath Madrid,D,A,Empate,Visitante,False
 2026-01-09 06:00:00,Getafe,Sociedad,A,A,Visitante,Visitante,True
-2026-01-10 06:00:00,Oviedo,Betis,D,A,Empate,Visitante,False
+2026-01-10 06:00:00,Oviedo,Betis,D,D,Empate,Empate,True
 2026-01-10 06:00:00,Valencia,Elche,D,H,Empate,Local,False
 2026-01-10 06:00:00,Girona,Osasuna,H,H,Local,Local,True
 2026-01-10 06:00:00,Villarreal,Alaves,H,H,Local,Local,True
 2026-01-11 06:00:00,Levante,Espanol,D,A,Empate,Visitante,False
 2026-01-11 06:00:00,Vallecano,Mallorca,H,H,Local,Local,True
-2026-01-12 06:00:00,Sevilla,Celta,A,H,Visitante,Local,False
+2026-01-12 06:00:00,Sevilla,Celta,A,D,Visitante,Empate,False
 2026-01-16 06:00:00,Espanol,Girona,A,H,Visitante,Local,False
 2026-01-17 06:00:00,Betis,Villarreal,H,A,Local,Visitante,False
 2026-01-17 06:00:00,Mallorca,Ath Bilbao,H,A,Local,Visitante,False
@@ -51,7 +51,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-01-24 06:00:00,Vallecano,Osasuna,A,D,Visitante,Empate,False
 2026-01-24 06:00:00,Sevilla,Ath Bilbao,H,H,Local,Local,True
 2026-01-24 06:00:00,Valencia,Espanol,H,H,Local,Local,True
-2026-01-25 06:00:00,Alaves,Betis,H,D,Local,Empate,False
+2026-01-25 06:00:00,Alaves,Betis,H,H,Local,Local,True
 2026-01-25 06:00:00,Ath Madrid,Mallorca,H,H,Local,Local,True
 2026-01-25 06:00:00,Barcelona,Oviedo,H,H,Local,Local,True
 2026-01-25 06:00:00,Sociedad,Celta,H,H,Local,Local,True
@@ -63,9 +63,9 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-01-31 06:00:00,Elche,Barcelona,A,A,Visitante,Visitante,True
 2026-02-01 06:00:00,Ath Bilbao,Sociedad,D,H,Empate,Local,False
 2026-02-01 06:00:00,Betis,Valencia,H,H,Local,Local,True
-2026-02-01 06:00:00,Getafe,Celta,D,H,Empate,Local,False
+2026-02-01 06:00:00,Getafe,Celta,D,D,Empate,Empate,True
 2026-02-01 06:00:00,Real Madrid,Vallecano,H,H,Local,Local,True
-2026-02-02 06:00:00,Mallorca,Sevilla,H,D,Local,Empate,False
+2026-02-02 06:00:00,Mallorca,Sevilla,H,H,Local,Local,True
 2026-02-06 06:00:00,Celta,Osasuna,A,H,Visitante,Local,False
 2026-02-07 06:00:00,Barcelona,Mallorca,H,H,Local,Local,True
 2026-02-07 06:00:00,Sociedad,Elche,H,H,Local,Local,True
@@ -75,7 +75,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-02-08 06:00:00,Alaves,Getafe,A,H,Visitante,Local,False
 2026-02-08 06:00:00,Ath Madrid,Betis,A,H,Visitante,Local,False
 2026-02-09 06:00:00,Villarreal,Espanol,H,H,Local,Local,True
-2026-02-13 06:00:00,Elche,Osasuna,D,D,Empate,Empate,True
+2026-02-13 06:00:00,Elche,Osasuna,D,H,Empate,Local,False
 2026-02-14 06:00:00,Sevilla,Alaves,D,H,Empate,Local,False
 2026-02-14 06:00:00,Espanol,Celta,D,H,Empate,Local,False
 2026-02-14 06:00:00,Getafe,Villarreal,H,A,Local,Visitante,False
@@ -95,7 +95,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-02-22 06:00:00,Getafe,Sevilla,A,H,Visitante,Local,False
 2026-02-22 06:00:00,Barcelona,Levante,H,H,Local,Local,True
 2026-02-22 06:00:00,Celta,Mallorca,H,H,Local,Local,True
-2026-02-23 06:00:00,Alaves,Girona,D,D,Empate,Empate,True
+2026-02-23 06:00:00,Alaves,Girona,D,H,Empate,Local,False
 2026-02-27 06:00:00,Levante,Alaves,H,H,Local,Local,True
 2026-02-28 06:00:00,Barcelona,Villarreal,H,H,Local,Local,True
 2026-02-28 06:00:00,Mallorca,Sociedad,A,H,Visitante,Local,False
@@ -130,9 +130,9 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-03-20 06:00:00,Villarreal,Sociedad,H,H,Local,Local,True
 2026-03-21 06:00:00,Sevilla,Valencia,A,H,Visitante,Local,False
 2026-03-21 06:00:00,Osasuna,Girona,H,H,Local,Local,True
-2026-03-21 06:00:00,Elche,Mallorca,H,D,Local,Empate,False
+2026-03-21 06:00:00,Elche,Mallorca,H,H,Local,Local,True
 2026-03-21 06:00:00,Espanol,Getafe,A,D,Visitante,Empate,False
-2026-03-21 06:00:00,Levante,Oviedo,H,H,Local,Local,True
+2026-03-21 06:00:00,Levante,Oviedo,H,D,Local,Empate,False
 2026-03-22 06:00:00,Ath Bilbao,Betis,H,H,Local,Local,True
 2026-03-22 06:00:00,Barcelona,Vallecano,H,H,Local,Local,True
 2026-03-22 06:00:00,Celta,Alaves,A,H,Visitante,Local,False
@@ -144,7 +144,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-04-04 06:00:00,Ath Madrid,Barcelona,A,A,Visitante,Visitante,True
 2026-04-05 06:00:00,Alaves,Osasuna,D,H,Empate,Local,False
 2026-04-05 06:00:00,Getafe,Ath Bilbao,H,A,Local,Visitante,False
-2026-04-05 06:00:00,Oviedo,Sevilla,H,A,Local,Visitante,False
+2026-04-05 06:00:00,Oviedo,Sevilla,H,H,Local,Local,True
 2026-04-05 06:00:00,Valencia,Celta,A,H,Visitante,Local,False
 2026-04-06 06:00:00,Girona,Villarreal,H,A,Local,Visitante,False
 2026-04-10 06:00:00,Real Madrid,Girona,D,H,Empate,Local,False
@@ -159,9 +159,9 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-04-13 06:00:00,Levante,Getafe,H,D,Local,Empate,False
 2026-04-21 06:00:00,Ath Bilbao,Osasuna,H,H,Local,Local,True
 2026-04-21 06:00:00,Girona,Betis,A,H,Visitante,Local,False
-2026-04-21 06:00:00,Mallorca,Valencia,D,D,Empate,Empate,True
+2026-04-21 06:00:00,Mallorca,Valencia,D,H,Empate,Local,False
 2026-04-21 06:00:00,Real Madrid,Alaves,H,H,Local,Local,True
-2026-04-22 06:00:00,Sociedad,Getafe,A,H,Visitante,Local,False
+2026-04-22 06:00:00,Sociedad,Getafe,A,D,Visitante,Empate,False
 2026-04-22 06:00:00,Barcelona,Celta,H,H,Local,Local,True
 2026-04-22 06:00:00,Elche,Ath Madrid,H,A,Local,Visitante,False
 2026-04-23 06:00:00,Levante,Sevilla,H,A,Local,Visitante,False
@@ -169,7 +169,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-04-23 06:00:00,Vallecano,Espanol,H,H,Local,Local,True
 2026-04-24 06:00:00,Betis,Real Madrid,D,A,Empate,Visitante,False
 2026-04-25 06:00:00,Valencia,Girona,H,H,Local,Local,True
-2026-04-25 06:00:00,Alaves,Mallorca,H,D,Local,Empate,False
+2026-04-25 06:00:00,Alaves,Mallorca,H,H,Local,Local,True
 2026-04-25 06:00:00,Ath Madrid,Ath Bilbao,H,H,Local,Local,True
 2026-04-25 06:00:00,Getafe,Barcelona,A,A,Visitante,Visitante,True
 2026-04-26 06:00:00,Vallecano,Sociedad,D,H,Empate,Local,False
@@ -223,7 +223,7 @@ Date,HomeTeam,AwayTeam,FTR,PredictedFTR,Resultado,Prediccion,correct
 2026-05-23 06:00:00,Getafe,Osasuna,H,H,Local,Local,True
 2026-05-23 06:00:00,Valencia,Barcelona,H,A,Local,Visitante,False
 2026-05-23 06:00:00,Celta,Sevilla,H,H,Local,Local,True
-2026-05-23 06:00:00,Betis,Levante,H,H,Local,Local,True
-2026-05-23 06:00:00,Alaves,Vallecano,A,D,Visitante,Empate,False
+2026-05-23 06:00:00,Betis,Levante,H,D,Local,Empate,False
+2026-05-23 06:00:00,Alaves,Vallecano,A,H,Visitante,Local,False
 2026-05-23 06:00:00,Espanol,Sociedad,D,A,Empate,Visitante,False
 2026-05-24 06:00:00,Villarreal,Ath Madrid,H,H,Local,Local,True

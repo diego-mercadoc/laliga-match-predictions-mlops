@@ -23,9 +23,12 @@ from sklearn.metrics import (
 )
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils.class_weight import compute_sample_weight
 
 from services.multi_season_experiments import CURRENT_SEASON, FEATURE_COLUMNS, choose_current_season_split
 
+ACTIONABLE_MINORITY_RATE = 0.08
+ACTIONABLE_MINORITY_COUNT = 12
 
 CLASSIFICATION_TARGETS: Dict[str, Callable[[pd.DataFrame], pd.Series]] = {
     "match_result_1x2": lambda df: df["FTR"],
@@ -66,6 +69,7 @@ class TargetResult:
     train_rows: int
     test_rows: int
     target_rate: Optional[float]
+    minority_class_rate: Optional[float]
     majority_class_rate: Optional[float]
     accuracy: Optional[float]
     balanced_accuracy: Optional[float]
@@ -81,6 +85,8 @@ class TargetResult:
     selection_metric: float
     decision_threshold: Optional[float]
     imbalance_flag: bool
+    actionable_target: bool
+    rare_event_policy: str
     notes: str
 
 
@@ -95,7 +101,7 @@ def _feature_pipeline(model, scale: bool = False) -> Pipeline:
 def _classification_model_factories(is_multiclass: bool) -> Dict[str, Callable[[], Pipeline]]:
     return {
         "logistic_l2_balanced": lambda: _feature_pipeline(
-            LogisticRegression(max_iter=500, class_weight="balanced" if not is_multiclass else None, n_jobs=None),
+            LogisticRegression(max_iter=500, n_jobs=None),
             scale=True,
         ),
         "hist_gradient_boosting": lambda: _feature_pipeline(
@@ -106,7 +112,6 @@ def _classification_model_factories(is_multiclass: bool) -> Dict[str, Callable[[
                 n_estimators=320,
                 max_depth=8,
                 min_samples_leaf=8,
-                class_weight="balanced" if not is_multiclass else None,
                 random_state=42,
                 n_jobs=-1,
             )
@@ -177,7 +182,7 @@ def _tuned_threshold(model_factory: Callable[[], Pipeline], train: pd.DataFrame,
     if y_inner.nunique() < 2 or y_validation.nunique() < 2:
         return 0.5
     model = model_factory()
-    model.fit(x_inner, y_inner)
+    _fit_classification_model(model, x_inner, y_inner)
     if not hasattr(model.named_steps["model"], "predict_proba"):
         return 0.5
     classes = list(model.named_steps["model"].classes_)
@@ -186,6 +191,12 @@ def _tuned_threshold(model_factory: Callable[[], Pipeline], train: pd.DataFrame,
     probabilities = model.predict_proba(x_validation)
     positive_probability = probabilities[:, classes.index(1)]
     return _best_binary_threshold(y_validation, positive_probability)
+
+
+def _fit_classification_model(model: Pipeline, x_data: pd.DataFrame, y_data: pd.Series) -> Pipeline:
+    sample_weight = compute_sample_weight(class_weight="balanced", y=y_data)
+    model.fit(x_data, y_data, model__sample_weight=sample_weight)
+    return model
 
 
 def _predict_classification(model: Pipeline, x_data: pd.DataFrame, decision_threshold: Optional[float]) -> np.ndarray:
@@ -215,7 +226,10 @@ def _classification_result(
     probabilities = model.predict_proba(x_test) if hasattr(model.named_steps["model"], "predict_proba") else None
     predicted = _predict_classification(model, x_test, decision_threshold)
     counts = pd.Series(y_test).value_counts(normalize=True)
+    raw_counts = pd.Series(y_test).value_counts()
     majority_rate = float(counts.max())
+    minority_rate = float(counts.min())
+    minority_count = int(raw_counts.min())
     target_rate = float(pd.Series(y_test).mean()) if set(pd.Series(y_test).dropna().unique()).issubset({0, 1}) else None
     auc = _safe_roc_auc(y_test, probabilities, classes) if probabilities is not None else None
     loss = _safe_log_loss(y_test, probabilities, labels=list(classes)) if probabilities is not None else None
@@ -230,10 +244,19 @@ def _classification_result(
     auc_component = auc if auc is not None else balanced
     selection = (balanced * 0.55) + (auc_component * 0.30) + (f1 * 0.15)
     baseline_delta = accuracy - majority_rate
-    imbalance_flag = target_rate is not None and (target_rate < 0.20 or target_rate > 0.80)
+    imbalance_flag = minority_rate < 0.20
+    actionable = minority_rate >= ACTIONABLE_MINORITY_RATE and minority_count >= ACTIONABLE_MINORITY_COUNT
+    rare_event_policy = "model_candidate"
     notes = ""
     if imbalance_flag:
         notes = "Imbalanced target; model selected by balanced metrics and tuned threshold, not raw accuracy."
+    if not actionable:
+        rare_event_policy = "audit_only_low_minority_support"
+        selection *= 0.85
+        notes = (
+            (notes + " " if notes else "")
+            + f"Audit-only target: minority support is {minority_count} rows ({minority_rate:.1%}) in the temporal test split."
+        )
     if baseline_delta <= 0:
         notes = (notes + " " if notes else "") + "Does not beat majority-class accuracy baseline."
     return TargetResult(
@@ -243,6 +266,7 @@ def _classification_result(
         train_rows=len(y_train),
         test_rows=len(y_test),
         target_rate=target_rate,
+        minority_class_rate=minority_rate,
         majority_class_rate=majority_rate,
         accuracy=accuracy,
         balanced_accuracy=balanced,
@@ -258,6 +282,8 @@ def _classification_result(
         selection_metric=selection,
         decision_threshold=decision_threshold,
         imbalance_flag=imbalance_flag,
+        actionable_target=actionable,
+        rare_event_policy=rare_event_policy,
         notes=notes,
     )
 
@@ -276,6 +302,7 @@ def _regression_result(name: str, model_name: str, model: Pipeline, x_test: pd.D
         train_rows=len(y_train),
         test_rows=len(y_test),
         target_rate=None,
+        minority_class_rate=None,
         majority_class_rate=None,
         accuracy=None,
         balanced_accuracy=None,
@@ -291,6 +318,8 @@ def _regression_result(name: str, model_name: str, model: Pipeline, x_test: pd.D
         selection_metric=selection,
         decision_threshold=None,
         imbalance_flag=False,
+        actionable_target=True,
+        rare_event_policy="not_applicable",
         notes="Selection metric is baseline MAE improvement.",
     )
 
@@ -336,12 +365,12 @@ def run_multi_target_experiments(
         for model_name, model_factory in model_factories.items():
             decision_threshold = _tuned_threshold(model_factory, train, y_train, is_multiclass)
             model = model_factory()
-            model.fit(x_train, y_train)
+            _fit_classification_model(model, x_train, y_train)
             candidates.append(_classification_result(target_name, model_name, model, x_test, y_train, y_test, decision_threshold))
         best = _select_best(candidates)
         target_results.append(best)
         best_model = model_factories[best.model_name]()
-        best_model.fit(x_train, y_train)
+        _fit_classification_model(best_model, x_train, y_train)
         predicted = _predict_classification(best_model, x_test, best.decision_threshold)
         predictions_frames.append(
             pd.DataFrame(
@@ -394,10 +423,10 @@ def run_multi_target_experiments(
     regression = [item for item in target_results if item.task_type == "regression"]
     best_raw_accuracy = max(classification, key=lambda item: item.accuracy or 0.0)
     useful_accuracy_candidates = [
-        item for item in classification if not item.imbalance_flag and (item.baseline_accuracy_delta or -1.0) > 0
+        item for item in classification if item.actionable_target and (item.baseline_accuracy_delta or -1.0) > 0
     ]
     useful_balanced_candidates = [
-        item for item in classification if not item.imbalance_flag and (item.baseline_accuracy_delta or -1.0) > -0.02
+        item for item in classification if item.actionable_target and (item.baseline_accuracy_delta or -1.0) > -0.02
     ]
     best_accuracy = max(
         useful_accuracy_candidates or classification,
@@ -413,6 +442,7 @@ def run_multi_target_experiments(
         "test_rows": len(test),
         "target_count": len(target_results),
         "imbalanced_classification_targets": sum(1 for item in classification if item.imbalance_flag),
+        "audit_only_classification_targets": sum(1 for item in classification if not item.actionable_target),
         "best_accuracy_target": asdict(best_accuracy),
         "best_raw_accuracy_target": asdict(best_raw_accuracy),
         "best_balanced_target": asdict(best_balanced),

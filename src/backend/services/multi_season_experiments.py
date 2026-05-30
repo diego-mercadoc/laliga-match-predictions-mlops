@@ -20,7 +20,24 @@ from services.laliga_spark_pipeline import create_spark_session
 
 
 CURRENT_SEASON = "2526"
-DEFAULT_SEASONS = ["1819", "1920", "2021", "2122", "2223", "2324", "2425", "2526"]
+DEFAULT_SEASONS = [
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526",
+]
 FOOTBALL_DATA_TEMPLATE = "https://www.football-data.co.uk/mmz4281/{season}/SP1.csv"
 
 MARKET_ODDS_GROUPS = [
@@ -208,7 +225,7 @@ def validate_source_files(paths: Iterable[Path]) -> List[Dict[str, object]]:
     required_columns = {"Date", "HomeTeam", "AwayTeam", "FTR", "FTHG", "FTAG"}
     for path in paths:
         pdf = pd.read_csv(path, encoding="utf-8-sig")
-        date_series = pd.to_datetime(pdf.get("Date"), dayfirst=True, errors="coerce")
+        date_series = _parse_match_dates(pdf.get("Date"))
         market_columns = [column for column in MARKET_COLUMNS if column in pdf.columns]
         rows = len(pdf)
         reports.append(
@@ -236,6 +253,15 @@ def validate_source_files(paths: Iterable[Path]) -> List[Dict[str, object]]:
             }
         )
     return reports
+
+
+def _parse_match_dates(values: pd.Series) -> pd.Series:
+    text = values.astype("string").str.strip()
+    parsed = pd.to_datetime(text, format="%d/%m/%Y", errors="coerce")
+    missing = parsed.isna()
+    if missing.any():
+        parsed.loc[missing] = pd.to_datetime(text[missing], format="%d/%m/%y", errors="coerce")
+    return parsed
 
 
 def download_football_data(
@@ -270,7 +296,7 @@ def load_match_data(paths: Iterable[Path]) -> pd.DataFrame:
     for missing in set(RAW_COLUMNS) - set(df.columns):
         df[missing] = pd.NA
 
-    df["Date"] = pd.to_datetime(df["Date"], dayfirst=True, errors="coerce")
+    df["Date"] = _parse_match_dates(df["Date"])
     df = df.dropna(subset=["Date", "HomeTeam", "AwayTeam", "FTR", "FTHG", "FTAG"])
     df = df[df["FTR"].isin(["H", "D", "A"])].copy()
     numeric_cols = [col for col in RAW_COLUMNS if col not in {"Season", "Date", "HomeTeam", "AwayTeam", "FTR"}]
@@ -719,11 +745,18 @@ def run_experiment(
 
 
 def experiment_grid() -> List[ExperimentConfig]:
+    def trailing(count: int) -> List[str]:
+        return DEFAULT_SEASONS[-min(count, len(DEFAULT_SEASONS)) :]
+
     windows = {
-        "current_only": ["2526"],
-        "last_2": ["2425", "2526"],
-        "last_4": ["2223", "2324", "2425", "2526"],
-        "last_8": DEFAULT_SEASONS,
+        "current_only": [CURRENT_SEASON],
+        "last_2": trailing(2),
+        "last_4": trailing(4),
+        "last_6": trailing(6),
+        "last_8": trailing(8),
+        "last_10": trailing(10),
+        "last_12": trailing(12),
+        f"all_{len(DEFAULT_SEASONS)}": DEFAULT_SEASONS,
     }
     configs: List[ExperimentConfig] = []
     model_variants = [
@@ -733,9 +766,12 @@ def experiment_grid() -> List[ExperimentConfig]:
     for window_name, seasons in windows.items():
         for variant_name, model_family, params in model_variants:
             configs.append(ExperimentConfig(f"{window_name}_{variant_name}", seasons, model_family, None, params))
-            if window_name in {"last_4", "last_8"}:
+            if len(seasons) >= 4:
+                configs.append(ExperimentConfig(f"{window_name}_{variant_name}_recency_1", seasons, model_family, 1.0, params))
                 configs.append(ExperimentConfig(f"{window_name}_{variant_name}_recency_2", seasons, model_family, 2.0, params))
                 configs.append(ExperimentConfig(f"{window_name}_{variant_name}_recency_4", seasons, model_family, 4.0, params))
+                if len(seasons) >= 8:
+                    configs.append(ExperimentConfig(f"{window_name}_{variant_name}_recency_8", seasons, model_family, 8.0, params))
     return configs
 
 

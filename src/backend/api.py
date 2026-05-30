@@ -624,7 +624,7 @@ async def latest_targets_page() -> str:
     classification = results[results["task_type"] == "classification"].copy()
     regression = results[results["task_type"] == "regression"].copy()
     classification["usable_target"] = (
-        ~classification["imbalance_flag"].fillna(False)
+        classification["actionable_target"].fillna(False)
         & (classification["baseline_accuracy_delta"].fillna(-1.0) > -0.02)
     )
     classification = classification.sort_values(["usable_target", "selection_metric", "accuracy"], ascending=False)
@@ -639,10 +639,13 @@ async def latest_targets_page() -> str:
             "f1_weighted",
             "roc_auc",
             "target_rate",
+            "minority_class_rate",
             "majority_class_rate",
             "baseline_accuracy_delta",
             "decision_threshold",
             "imbalance_flag",
+            "actionable_target",
+            "rare_event_policy",
             "notes",
         ]
     ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
@@ -655,6 +658,7 @@ async def latest_targets_page() -> str:
     best_balanced = summary["best_balanced_target"]
     best_regression = summary["best_regression_target"]
     imbalanced_targets = summary.get("imbalanced_classification_targets", int(classification["imbalance_flag"].fillna(False).sum()))
+    audit_only_targets = summary.get("audit_only_classification_targets", int((~classification["actionable_target"].fillna(True)).sum()))
     return f"""
     <!doctype html>
     <html lang="es">
@@ -697,10 +701,10 @@ async def latest_targets_page() -> str:
           <div class="metric"><span>Targets</span><strong>{summary["target_count"]}</strong></div>
           <div class="metric"><span>Mejor target útil</span><strong>{best_accuracy["target"]}: {best_accuracy["accuracy"]:.1%}</strong></div>
           <div class="metric"><span>Raw accuracy audit</span><strong>{best_raw_accuracy["target"]}: {best_raw_accuracy["accuracy"]:.1%}</strong></div>
-          <div class="metric"><span>Desbalanceados</span><strong>{imbalanced_targets}</strong></div>
+          <div class="metric"><span>Desbalanceados / auditoría</span><strong>{imbalanced_targets} / {audit_only_targets}</strong></div>
         </div>
         <div class="panel">
-          <p><strong>Lectura rápida:</strong> <code>{best_balanced["target"]}</code> es el mejor target por métrica balanceada ({best_balanced["selection_metric"]:.3f}). <code>{best_raw_accuracy["target"]}</code> puede mostrar accuracy alta, pero queda separado como auditoría cruda si depende de una clase dominante. Para clasificación usa <code>balanced_accuracy</code>, <code>baseline_accuracy_delta</code>, AUC y el umbral; para regresión, MAE contra baseline.</p>
+          <p><strong>Lectura rápida:</strong> <code>{best_balanced["target"]}</code> es el mejor target accionable por métrica balanceada ({best_balanced["selection_metric"]:.3f}). <code>{best_raw_accuracy["target"]}</code> puede mostrar accuracy alta, pero queda separado como auditoría cruda si depende de una clase dominante o tiene soporte minoritario bajo. Para clasificación usa <code>balanced_accuracy</code>, <code>baseline_accuracy_delta</code>, AUC, soporte minoritario y el umbral; para regresión, MAE contra baseline.</p>
           <p><strong>Mejor regresión:</strong> <code>{best_regression["target"]}</code> con MAE {best_regression["mae"]:.2f}.</p>
         </div>
         <h2>Clasificación</h2>

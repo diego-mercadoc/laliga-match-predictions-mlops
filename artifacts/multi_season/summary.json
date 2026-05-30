@@ -2,8 +2,16 @@
   "split_date": "2025-12-12",
   "train_current_rows": 152,
   "test_current_rows": 228,
-  "data_rows": 3040,
+  "data_rows": 6080,
   "seasons": [
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
     "1819",
     "1920",
     "2021",
@@ -24,9 +32,9 @@
       "2425",
       "2526"
     ],
-    "accuracy": 0.5,
-    "f1_weighted": 0.45848704401335977,
-    "log_loss_proxy": 0.9483605941684765,
+    "accuracy": 0.5131578947368421,
+    "f1_weighted": 0.46729914314162707,
+    "log_loss_proxy": 0.9473063081090246,
     "recency_half_life": null,
     "params": {
       "regParam": 0.08,
@@ -42,9 +50,9 @@
       "seasons": [
         "2526"
       ],
-      "accuracy": 0.5394736842105263,
-      "f1_weighted": 0.5221841359514321,
-      "log_loss_proxy": 1.0294814656823128,
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.4926641763733657,
+      "log_loss_proxy": 1.0253996576489466,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -59,9 +67,9 @@
       "seasons": [
         "2526"
       ],
-      "accuracy": 0.4824561403508772,
-      "f1_weighted": 0.43883308325245995,
-      "log_loss_proxy": 0.9930718343998277,
+      "accuracy": 0.49122807017543857,
+      "f1_weighted": 0.456851718161594,
+      "log_loss_proxy": 0.9955718669329291,
       "recency_half_life": null,
       "params": {
         "numTrees": 80,
@@ -78,9 +86,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5307017543859649,
-      "f1_weighted": 0.4932503148670463,
-      "log_loss_proxy": 0.9642079220357511,
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.48016851973152536,
+      "log_loss_proxy": 0.9608076912495844,
       "recency_half_life": null,
       "params": {
         "regParam": 0.08,
@@ -96,9 +104,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5263157894736842,
-      "f1_weighted": 0.4714066444572268,
-      "log_loss_proxy": 0.9694709058398241,
+      "accuracy": 0.49122807017543857,
+      "f1_weighted": 0.43294401609501026,
+      "log_loss_proxy": 0.9799119492750336,
       "recency_half_life": null,
       "params": {
         "numTrees": 80,
@@ -117,10 +125,30 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5,
-      "f1_weighted": 0.45848704401335977,
-      "log_loss_proxy": 0.9483605941684765,
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.46729914314162707,
+      "log_loss_proxy": 0.9473063081090246,
       "recency_half_life": null,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_4_logistic_regression_l2_recency_1",
+      "model_family": "logistic_regression",
+      "train_rows": 1292,
+      "test_rows": 228,
+      "seasons": [
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5350877192982456,
+      "f1_weighted": 0.5004790787377366,
+      "log_loss_proxy": 0.9497024278939504,
+      "recency_half_life": 1.0,
       "params": {
         "regParam": 0.08,
         "elasticNetParam": 0.0
@@ -137,9 +165,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.46510396745251614,
-      "log_loss_proxy": 0.9495079313167757,
+      "accuracy": 0.5263157894736842,
+      "f1_weighted": 0.48448330343434726,
+      "log_loss_proxy": 0.9478660475235511,
       "recency_half_life": 2.0,
       "params": {
         "regParam": 0.08,
@@ -157,9 +185,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.46570062928218375,
-      "log_loss_proxy": 0.9487725594816441,
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.4747700766510201,
+      "log_loss_proxy": 0.9474407678267485,
       "recency_half_life": 4.0,
       "params": {
         "regParam": 0.08,
@@ -177,10 +205,31 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5175438596491229,
-      "f1_weighted": 0.4481263765474292,
-      "log_loss_proxy": 0.9658114111143161,
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.43175010697475397,
+      "log_loss_proxy": 0.9627882217948749,
       "recency_half_life": null,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_4_random_forest_regularized_recency_1",
+      "model_family": "random_forest",
+      "train_rows": 1292,
+      "test_rows": 228,
+      "seasons": [
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.4956140350877193,
+      "f1_weighted": 0.43315012623810445,
+      "log_loss_proxy": 0.9640063252986245,
+      "recency_half_life": 1.0,
       "params": {
         "numTrees": 80,
         "maxDepth": 5,
@@ -199,8 +248,8 @@
         "2526"
       ],
       "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.4512256524609633,
-      "log_loss_proxy": 0.967941315448516,
+      "f1_weighted": 0.4556724996352134,
+      "log_loss_proxy": 0.9686737700380367,
       "recency_half_life": 2.0,
       "params": {
         "numTrees": 80,
@@ -219,9 +268,189 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.4407161580347587,
-      "log_loss_proxy": 0.967829459997697,
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.46231069413834236,
+      "log_loss_proxy": 0.9614637821761745,
+      "recency_half_life": 4.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_6_logistic_regression_l2",
+      "model_family": "logistic_regression",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.45646318713023354,
+      "log_loss_proxy": 0.9598501636929783,
+      "recency_half_life": null,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_6_logistic_regression_l2_recency_1",
+      "model_family": "logistic_regression",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5394736842105263,
+      "f1_weighted": 0.49560522775611704,
+      "log_loss_proxy": 0.9496551175914516,
+      "recency_half_life": 1.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_6_logistic_regression_l2_recency_2",
+      "model_family": "logistic_regression",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.46418162813575997,
+      "log_loss_proxy": 0.9513149804463796,
+      "recency_half_life": 2.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_6_logistic_regression_l2_recency_4",
+      "model_family": "logistic_regression",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.4532009837612554,
+      "log_loss_proxy": 0.9546711439547111,
+      "recency_half_life": 4.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_6_random_forest_regularized",
+      "model_family": "random_forest",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.45306426020936796,
+      "log_loss_proxy": 0.9660321685156574,
+      "recency_half_life": null,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_6_random_forest_regularized_recency_1",
+      "model_family": "random_forest",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5,
+      "f1_weighted": 0.4426991468556451,
+      "log_loss_proxy": 0.9665825565353733,
+      "recency_half_life": 1.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_6_random_forest_regularized_recency_2",
+      "model_family": "random_forest",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5,
+      "f1_weighted": 0.432469040247678,
+      "log_loss_proxy": 0.9708828068038595,
+      "recency_half_life": 2.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_6_random_forest_regularized_recency_4",
+      "model_family": "random_forest",
+      "train_rows": 2052,
+      "test_rows": 228,
+      "seasons": [
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5043859649122807,
+      "f1_weighted": 0.43745054873640354,
+      "log_loss_proxy": 0.9692045349606149,
       "recency_half_life": 4.0,
       "params": {
         "numTrees": 80,
@@ -245,9 +474,33 @@
         "2526"
       ],
       "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.4399211055808535,
-      "log_loss_proxy": 0.9646861726113116,
+      "f1_weighted": 0.4446833162029908,
+      "log_loss_proxy": 0.9644367172750993,
       "recency_half_life": null,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_8_logistic_regression_l2_recency_1",
+      "model_family": "logistic_regression",
+      "train_rows": 2812,
+      "test_rows": 228,
+      "seasons": [
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5394736842105263,
+      "f1_weighted": 0.49560522775611704,
+      "log_loss_proxy": 0.9497739064068138,
+      "recency_half_life": 1.0,
       "params": {
         "regParam": 0.08,
         "elasticNetParam": 0.0
@@ -268,9 +521,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5219298245614035,
-      "f1_weighted": 0.4633170545316841,
-      "log_loss_proxy": 0.9553282752313965,
+      "accuracy": 0.4956140350877193,
+      "f1_weighted": 0.4305226553716631,
+      "log_loss_proxy": 0.9528694009355211,
       "recency_half_life": 2.0,
       "params": {
         "regParam": 0.08,
@@ -292,10 +545,34 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5175438596491229,
-      "f1_weighted": 0.4504555881228495,
-      "log_loss_proxy": 0.9595274188484515,
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.44967693791322233,
+      "log_loss_proxy": 0.9576796920840343,
       "recency_half_life": 4.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_8_logistic_regression_l2_recency_8",
+      "model_family": "logistic_regression",
+      "train_rows": 2812,
+      "test_rows": 228,
+      "seasons": [
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.4546996448944506,
+      "log_loss_proxy": 0.9608659129730934,
+      "recency_half_life": 8.0,
       "params": {
         "regParam": 0.08,
         "elasticNetParam": 0.0
@@ -316,10 +593,35 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5175438596491229,
-      "f1_weighted": 0.44010750015534705,
-      "log_loss_proxy": 0.9746442315650338,
+      "accuracy": 0.5043859649122807,
+      "f1_weighted": 0.4463080778870253,
+      "log_loss_proxy": 0.9730171765727089,
       "recency_half_life": null,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_8_random_forest_regularized_recency_1",
+      "model_family": "random_forest",
+      "train_rows": 2812,
+      "test_rows": 228,
+      "seasons": [
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.4573606525538939,
+      "log_loss_proxy": 0.9730616803988343,
+      "recency_half_life": 1.0,
       "params": {
         "numTrees": 80,
         "maxDepth": 5,
@@ -341,9 +643,9 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.4956140350877193,
-      "f1_weighted": 0.4283287176013078,
-      "log_loss_proxy": 0.9717606024531426,
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.4441740567770373,
+      "log_loss_proxy": 0.9723460513324803,
       "recency_half_life": 2.0,
       "params": {
         "numTrees": 80,
@@ -366,10 +668,910 @@
         "2425",
         "2526"
       ],
-      "accuracy": 0.5087719298245614,
-      "f1_weighted": 0.43794083749519785,
-      "log_loss_proxy": 0.9722975421881419,
+      "accuracy": 0.4868421052631579,
+      "f1_weighted": 0.418417839470471,
+      "log_loss_proxy": 0.9743043485505756,
       "recency_half_life": 4.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_8_random_forest_regularized_recency_8",
+      "model_family": "random_forest",
+      "train_rows": 2812,
+      "test_rows": 228,
+      "seasons": [
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.44691682767289737,
+      "log_loss_proxy": 0.97307446087708,
+      "recency_half_life": 8.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_10_logistic_regression_l2",
+      "model_family": "logistic_regression",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.43871748336358135,
+      "log_loss_proxy": 0.9725375785845898,
+      "recency_half_life": null,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_10_logistic_regression_l2_recency_1",
+      "model_family": "logistic_regression",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5394736842105263,
+      "f1_weighted": 0.49560522775611704,
+      "log_loss_proxy": 0.9498401921196427,
+      "recency_half_life": 1.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_10_logistic_regression_l2_recency_2",
+      "model_family": "logistic_regression",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5,
+      "f1_weighted": 0.4312987329434698,
+      "log_loss_proxy": 0.9544170153901618,
+      "recency_half_life": 2.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_10_logistic_regression_l2_recency_4",
+      "model_family": "logistic_regression",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.45145820729985886,
+      "log_loss_proxy": 0.9617731288163295,
+      "recency_half_life": 4.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_10_logistic_regression_l2_recency_8",
+      "model_family": "logistic_regression",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5263157894736842,
+      "f1_weighted": 0.45226196596529744,
+      "log_loss_proxy": 0.9668253839085371,
+      "recency_half_life": 8.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_10_random_forest_regularized",
+      "model_family": "random_forest",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.45159891987129047,
+      "log_loss_proxy": 0.9765469863143177,
+      "recency_half_life": null,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_10_random_forest_regularized_recency_1",
+      "model_family": "random_forest",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5,
+      "f1_weighted": 0.4387745465252082,
+      "log_loss_proxy": 0.9678941758323928,
+      "recency_half_life": 1.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_10_random_forest_regularized_recency_2",
+      "model_family": "random_forest",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.4581310790286156,
+      "log_loss_proxy": 0.9725372346908189,
+      "recency_half_life": 2.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_10_random_forest_regularized_recency_4",
+      "model_family": "random_forest",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.44861833659887845,
+      "log_loss_proxy": 0.9688307272632242,
+      "recency_half_life": 4.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_10_random_forest_regularized_recency_8",
+      "model_family": "random_forest",
+      "train_rows": 3572,
+      "test_rows": 228,
+      "seasons": [
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5,
+      "f1_weighted": 0.42656159800373683,
+      "log_loss_proxy": 0.976820384416916,
+      "recency_half_life": 8.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_12_logistic_regression_l2",
+      "model_family": "logistic_regression",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.44157797014585043,
+      "log_loss_proxy": 0.9710799965443768,
+      "recency_half_life": null,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_12_logistic_regression_l2_recency_1",
+      "model_family": "logistic_regression",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5394736842105263,
+      "f1_weighted": 0.49560522775611704,
+      "log_loss_proxy": 0.9498092348386453,
+      "recency_half_life": 1.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_12_logistic_regression_l2_recency_2",
+      "model_family": "logistic_regression",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5,
+      "f1_weighted": 0.4312987329434698,
+      "log_loss_proxy": 0.9544589738965281,
+      "recency_half_life": 2.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_12_logistic_regression_l2_recency_4",
+      "model_family": "logistic_regression",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.4532847223337563,
+      "log_loss_proxy": 0.9618008304063519,
+      "recency_half_life": 4.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_12_logistic_regression_l2_recency_8",
+      "model_family": "logistic_regression",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.44913598173407543,
+      "log_loss_proxy": 0.966437969882255,
+      "recency_half_life": 8.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "last_12_random_forest_regularized",
+      "model_family": "random_forest",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.4392518180697646,
+      "log_loss_proxy": 0.9717561897216502,
+      "recency_half_life": null,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_12_random_forest_regularized_recency_1",
+      "model_family": "random_forest",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.44535970953078174,
+      "log_loss_proxy": 0.9698578178733889,
+      "recency_half_life": 1.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_12_random_forest_regularized_recency_2",
+      "model_family": "random_forest",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.4552169898430286,
+      "log_loss_proxy": 0.9657199038311292,
+      "recency_half_life": 2.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_12_random_forest_regularized_recency_4",
+      "model_family": "random_forest",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.45464384100747735,
+      "log_loss_proxy": 0.9682004536039375,
+      "recency_half_life": 4.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "last_12_random_forest_regularized_recency_8",
+      "model_family": "random_forest",
+      "train_rows": 4332,
+      "test_rows": 228,
+      "seasons": [
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5263157894736842,
+      "f1_weighted": 0.446528555431131,
+      "log_loss_proxy": 0.9728528741902724,
+      "recency_half_life": 8.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "all_16_logistic_regression_l2",
+      "model_family": "logistic_regression",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.44765559691731566,
+      "log_loss_proxy": 0.9714090524530895,
+      "recency_half_life": null,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "all_16_logistic_regression_l2_recency_1",
+      "model_family": "logistic_regression",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5394736842105263,
+      "f1_weighted": 0.49560522775611704,
+      "log_loss_proxy": 0.9497956776489634,
+      "recency_half_life": 1.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "all_16_logistic_regression_l2_recency_2",
+      "model_family": "logistic_regression",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5131578947368421,
+      "f1_weighted": 0.4500902031531885,
+      "log_loss_proxy": 0.9548151866069592,
+      "recency_half_life": 2.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "all_16_logistic_regression_l2_recency_4",
+      "model_family": "logistic_regression",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5263157894736842,
+      "f1_weighted": 0.45812317788669166,
+      "log_loss_proxy": 0.9629435899150497,
+      "recency_half_life": 4.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "all_16_logistic_regression_l2_recency_8",
+      "model_family": "logistic_regression",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.43966437833714717,
+      "log_loss_proxy": 0.967525940953714,
+      "recency_half_life": 8.0,
+      "params": {
+        "regParam": 0.08,
+        "elasticNetParam": 0.0
+      }
+    },
+    {
+      "name": "all_16_random_forest_regularized",
+      "model_family": "random_forest",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5175438596491229,
+      "f1_weighted": 0.4380331947079444,
+      "log_loss_proxy": 0.9716284933315307,
+      "recency_half_life": null,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "all_16_random_forest_regularized_recency_1",
+      "model_family": "random_forest",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5087719298245614,
+      "f1_weighted": 0.45007922065638306,
+      "log_loss_proxy": 0.9751712905005555,
+      "recency_half_life": 1.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "all_16_random_forest_regularized_recency_2",
+      "model_family": "random_forest",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.4448950065557566,
+      "log_loss_proxy": 0.9678628588870435,
+      "recency_half_life": 2.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "all_16_random_forest_regularized_recency_4",
+      "model_family": "random_forest",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5043859649122807,
+      "f1_weighted": 0.43062629692510845,
+      "log_loss_proxy": 0.9691581208114238,
+      "recency_half_life": 4.0,
+      "params": {
+        "numTrees": 80,
+        "maxDepth": 5,
+        "minInstancesPerNode": 8
+      }
+    },
+    {
+      "name": "all_16_random_forest_regularized_recency_8",
+      "model_family": "random_forest",
+      "train_rows": 5852,
+      "test_rows": 228,
+      "seasons": [
+        "1011",
+        "1112",
+        "1213",
+        "1314",
+        "1415",
+        "1516",
+        "1617",
+        "1718",
+        "1819",
+        "1920",
+        "2021",
+        "2122",
+        "2223",
+        "2324",
+        "2425",
+        "2526"
+      ],
+      "accuracy": 0.5219298245614035,
+      "f1_weighted": 0.4494982290436836,
+      "log_loss_proxy": 0.9696317842637235,
+      "recency_half_life": 8.0,
       "params": {
         "numTrees": 80,
         "maxDepth": 5,

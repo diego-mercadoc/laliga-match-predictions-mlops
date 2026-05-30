@@ -1,5 +1,141 @@
 [
   {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1011.csv",
+    "season": "1011",
+    "rows": 380,
+    "date_min": "2010-08-28",
+    "date_max": "2011-05-21",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1112.csv",
+    "season": "1112",
+    "rows": 380,
+    "date_min": "2011-08-27",
+    "date_max": "2012-05-13",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1213.csv",
+    "season": "1213",
+    "rows": 380,
+    "date_min": "2012-08-18",
+    "date_max": "2013-06-01",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1314.csv",
+    "season": "1314",
+    "rows": 380,
+    "date_min": "2013-08-17",
+    "date_max": "2014-05-18",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1415.csv",
+    "season": "1415",
+    "rows": 380,
+    "date_min": "2014-08-23",
+    "date_max": "2015-05-23",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1516.csv",
+    "season": "1516",
+    "rows": 380,
+    "date_min": "2015-08-21",
+    "date_max": "2016-05-15",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1617.csv",
+    "season": "1617",
+    "rows": 380,
+    "date_min": "2016-08-19",
+    "date_max": "2017-05-21",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
+    "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1718.csv",
+    "season": "1718",
+    "rows": 380,
+    "date_min": "2017-08-18",
+    "date_max": "2018-05-20",
+    "missing_required_columns": [],
+    "duplicate_fixture_rows": 0,
+    "result_rows": 380,
+    "market_columns_present": [
+      "B365A",
+      "B365D",
+      "B365H"
+    ],
+    "market_column_count": 3,
+    "avg_closing_odds_coverage": 0.0
+  },
+  {
     "path": "C:\\Users\\Diego\\Documents\\Codex\\laliga-match-predictions-mlops\\data\\raw\\football_data\\SP1_1819.csv",
     "season": "1819",
     "rows": 380,
