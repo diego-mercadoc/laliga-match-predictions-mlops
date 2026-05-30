@@ -646,6 +646,14 @@ async def latest_home_win_page() -> str:
     ].to_html(index=False, classes="results", border=0, float_format=lambda value: f"{value:.3f}")
     best = summary["best_by_validation"]
     audit = summary["best_by_test_audit"]
+    bayesian = summary.get("best_bayesian")
+    bayesian_note = ""
+    if bayesian:
+        bayesian_note = (
+            f'<p><strong>Mejor Bayesiano:</strong> <code>{bayesian["name"]}</code>, '
+            f'accuracy {bayesian["test_accuracy"]:.1%}, AUC {bayesian["test_roc_auc"]:.3f}, '
+            f'Brier {bayesian["test_brier_score"]:.3f}.</p>'
+        )
     return f"""
     <!doctype html>
     <html lang="es">
@@ -684,6 +692,7 @@ async def latest_home_win_page() -> str:
         <div class="panel">
           <p><strong>Modelo seleccionado:</strong> <code>{best["name"]}</code>. Ventana <code>{best["train_window"]}</code>, features <code>{best["feature_set"]}</code>, threshold {best["decision_threshold"]:.2f}.</p>
           <p><strong>Mejor test audit:</strong> <code>{audit["name"]}</code>, accuracy {audit["test_accuracy"]:.1%}, AUC {audit["test_roc_auc"]:.3f}. Útil para diagnóstico, no para escoger ganador.</p>
+          {bayesian_note}
         </div>
         <h2>Top experimentos</h2>
         {table}

@@ -398,6 +398,8 @@ def run_home_win_experiments(
         ["test_selection_metric", "test_accuracy", "validation_selection_metric"],
         ascending=False,
     ).iloc[0].to_dict()
+    bayesian_results = results_df[results_df["model_name"].str.startswith("gaussian_nb")]
+    best_bayesian = None if bayesian_results.empty else bayesian_results.iloc[0].to_dict()
 
     results_path = output_dir / "experiment_results.csv"
     summary_path = output_dir / "summary.json"
@@ -448,6 +450,7 @@ def run_home_win_experiments(
         "best_by_validation": best_by_validation,
         "best_by_validation_unrestricted": best_by_validation_unrestricted,
         "best_by_test_audit": best_by_test,
+        "best_bayesian": best_bayesian,
         "results_csv": str(results_path),
         "predictions_csv": str(predictions_path),
         }
